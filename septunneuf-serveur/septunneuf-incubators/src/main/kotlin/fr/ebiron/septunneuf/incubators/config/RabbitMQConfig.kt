@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration
 class RabbitMQConfig {
     @Bean
     fun createMonsterQueue(): Queue {
-        return Queue("create.monster.queue")
+        return Queue("createMonster.queue")
     }
 
     @Bean

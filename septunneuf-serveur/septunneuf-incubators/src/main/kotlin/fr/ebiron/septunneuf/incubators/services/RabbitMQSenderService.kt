@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service
 class RabbitMQSenderService(private val rabbitTemplate: RabbitTemplate) {
 
     fun sendCreateMonsterMessage(message: CreateMonsterRequestMessage) {
-        rabbitTemplate.convertAndSend("create.monster.queue", message)
+        rabbitTemplate.convertAndSend("createMonster.queue", message)
     }
 }
