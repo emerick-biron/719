@@ -1,9 +1,10 @@
 package fr.ebiron.septunneuf.eggs.controllers
 
-import fr.ebiron.septunneuf.eggs.dto.GenerateEggResponse
+import fr.ebiron.septunneuf.eggs.dto.IdResponse
 import fr.ebiron.septunneuf.eggs.models.Egg
 import fr.ebiron.septunneuf.eggs.services.EggService
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,8 +20,8 @@ class EggController(private val eggService: EggService) {
     @PostMapping("generate")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    fun createEgg(): GenerateEggResponse {
-        return GenerateEggResponse(eggService.generateEgg().id)
+    fun createEgg(): IdResponse {
+        return IdResponse(eggService.generateEgg().id)
     }
 
     @GetMapping("{eggId}/details")
@@ -28,4 +29,11 @@ class EggController(private val eggService: EggService) {
     fun getEggById(@PathVariable eggId: Long): Egg {
         return eggService.getEggById(eggId)
     }
+
+    @DeleteMapping("{eggId}/remove")
+    @ResponseBody
+    fun deleteEggById(@PathVariable eggId:Long): IdResponse{
+        return IdResponse(eggService.deleteEggById(eggId).id)
+    }
+
 }

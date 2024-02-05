@@ -22,4 +22,10 @@ class EggService(private val db: EggRepository, private val sequenceGeneratorSer
     fun getEggById(eggId: Long): Egg {
         return db.findById(eggId).orElseThrow { NotFoundException("Egg not found for id $eggId") }
     }
+
+    fun deleteEggById(eggId: Long): Egg {
+        val egg = getEggById(eggId)
+        db.delete(egg)
+        return egg
+    }
 }
