@@ -1,24 +1,25 @@
-package fr.ebiron.septunneuf.heroes.service;
+package fr.ebiron.septunneuf.monsters.service;
 
 import fr.ebiron.septunneuf.heroes.exception.ConflictException;
 import fr.ebiron.septunneuf.heroes.exception.NotFoundException;
-import fr.ebiron.septunneuf.heroes.model.Hero;
-import fr.ebiron.septunneuf.heroes.repository.HeroRepository;
+
+import fr.ebiron.septunneuf.monsters.model.Monster;
+import fr.ebiron.septunneuf.monsters.repository.MonsterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Service
-public class HeroService {
-    private final HeroRepository bd;
+public class MonsterService {
+    private final MonsterRepository bd;
 
     @Autowired
-    public HeroService(HeroRepository bd) {
+    public MonsterService(MonsterRepository bd) {
         this.bd = bd;
     }
 
     @ExceptionHandler
-    public Hero createHero(String nom, String color) throws ConflictException {
+    public Monster createMonster() throws ConflictException {
         if (bd.existsById(nom)){
             throw new ConflictException("Hero "+nom+" already exist");
         }
@@ -27,8 +28,10 @@ public class HeroService {
         return hero;
     }
 
+    public
+
     @ExceptionHandler
-    public Hero getHero(String name) throws NotFoundException {
+    public Monster getMonster(String name) throws NotFoundException {
         return bd.findById(name).orElseThrow(()->new NotFoundException("Hero "+name+"not found"));
     }
 }
