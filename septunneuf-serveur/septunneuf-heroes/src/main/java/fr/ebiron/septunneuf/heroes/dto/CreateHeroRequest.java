@@ -1,7 +1,11 @@
 package fr.ebiron.septunneuf.heroes.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CreateHeroRequest {
+    @NotBlank(message = "Name is mandatory")
     private String name;
+    @NotBlank(message = "Color is mandatory")
     private String color;
 
     public CreateHeroRequest() {

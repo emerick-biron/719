@@ -7,6 +7,7 @@ import fr.ebiron.septunneuf.heroes.exception.ConflictException;
 import fr.ebiron.septunneuf.heroes.exception.NotFoundException;
 import fr.ebiron.septunneuf.heroes.model.Hero;
 import fr.ebiron.septunneuf.heroes.service.HeroService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class HeroController {
     @PostMapping("/create")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateHeroResponse createHero(@RequestBody CreateHeroRequest req) throws ConflictException {
+    public CreateHeroResponse createHero(@Valid @RequestBody CreateHeroRequest req) throws ConflictException {
         Hero hero = heroService.createHero(req.getName(), req.getColor());
         return new CreateHeroResponse(hero.getName());
     }
