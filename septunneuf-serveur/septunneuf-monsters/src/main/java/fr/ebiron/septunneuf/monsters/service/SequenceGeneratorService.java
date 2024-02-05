@@ -1,6 +1,7 @@
 package fr.ebiron.septunneuf.monsters.service;
 
 
+import fr.ebiron.septunneuf.monsters.model.DatabaseSequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;

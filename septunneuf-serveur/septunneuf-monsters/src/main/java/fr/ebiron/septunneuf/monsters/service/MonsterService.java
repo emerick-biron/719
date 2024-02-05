@@ -1,37 +1,42 @@
 package fr.ebiron.septunneuf.monsters.service;
 
-import fr.ebiron.septunneuf.heroes.exception.ConflictException;
-import fr.ebiron.septunneuf.heroes.exception.NotFoundException;
 
+import fr.ebiron.septunneuf.monsters.exception.NotFoundException;
 import fr.ebiron.septunneuf.monsters.model.Monster;
 import fr.ebiron.septunneuf.monsters.repository.MonsterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.ebiron.septunneuf.monsters.utils.RandomGenerators;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Service
 public class MonsterService {
     private final MonsterRepository bd;
+    private final SequenceGeneratorService sequenceGeneratorService;
 
-    @Autowired
-    public MonsterService(MonsterRepository bd) {
+    public MonsterService(MonsterRepository bd, SequenceGeneratorService sequenceGeneratorService) {
         this.bd = bd;
+        this.sequenceGeneratorService = sequenceGeneratorService;
     }
 
-    @ExceptionHandler
-    public Monster createMonster() throws ConflictException {
-        if (bd.existsById(nom)){
-            throw new ConflictException("Hero "+nom+" already exist");
-        }
-        Hero hero = new Hero(nom, color);
-        bd.save(hero);
-        return hero;
+    public Monster createMonster() {
+        String nom = RandomGenerators.randomMonsterName();
+        String color = RandomGenerators.randomHexColor();
+        long id = sequenceGeneratorService.generateSequence(Monster.SEQUENCE_NAME);
+
+        Monster monster = new Monster(id, nom, color);
+        bd.save(monster);
+        return monster;
     }
 
-    public
-
-    @ExceptionHandler
-    public Monster getMonster(String name) throws NotFoundException {
-        return bd.findById(name).orElseThrow(()->new NotFoundException("Hero "+name+"not found"));
+    public Monster getMonster(long id) throws NotFoundException {
+        return bd.findById(id).orElseThrow(()->new NotFoundException("Monster #"+id+" not found"));
     }
+
+    public Monster releaseMonster(long id) throws NotFoundException {
+        Monster monster = getMonster(id);
+        bd.delete(monster);
+
+        return monster;
+    }
+
+
 }
