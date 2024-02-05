@@ -5,7 +5,11 @@ import fr.ebiron.septunneuf.eggs.models.Egg
 import fr.ebiron.septunneuf.eggs.repositories.EggRepository
 import fr.ebiron.septunneuf.eggs.utils.randomHexColor
 import fr.ebiron.septunneuf.eggs.utils.randomIncubationTime
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 @Service
 class EggService(private val db: EggRepository, private val sequenceGeneratorService: SequenceGeneratorService) {

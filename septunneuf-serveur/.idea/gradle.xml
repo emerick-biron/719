@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/septunneuf-eggs" />
-        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="gradleJvm" value="openjdk-21" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/septunneuf-eggs" />
@@ -13,7 +14,7 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/septunneuf-heroes" />
-        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="gradleJvm" value="openjdk-21" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/septunneuf-heroes" />
@@ -21,11 +22,11 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/septunneuf-monsters" />
-        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/septunneuf-incubators" />
+        <option name="gradleJvm" value="openjdk-21" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/septunneuf-monsters" />
+            <option value="$PROJECT_DIR$/septunneuf-incubators" />
           </set>
         </option>
       </GradleProjectSettings>
