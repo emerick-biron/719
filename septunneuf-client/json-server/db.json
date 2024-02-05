@@ -1,0 +1,241 @@
+{
+  "eggs": [
+    {
+      "id": 1,
+      "color": "#B679F2"
+    },
+    {
+      "id": 2,
+      "color": "#8BDAEB"
+    },
+    {
+      "id": 3,
+      "color": "#F06B6B"
+    },
+    {
+      "id": 4,
+      "color": "#A95E5A"
+    }
+  ],
+  "monsters": [
+    {
+      "id": 1,
+      "color": "#B679F2",
+      "attack": 1,
+      "lvl": 1
+    },
+    {
+      "id": 2,
+      "color": "#8BDAEB",
+      "attack": 2,
+      "lvl": 1
+    },
+    {
+      "id": 3,
+      "color": "#F06B6B",
+      "attack": 3,
+      "lvl": 1
+    },
+    {
+      "id": 4,
+      "color": "#A95E5A",
+      "attack": 4,
+      "lvl": 1
+    },
+    {
+      "id": 5,
+      "color": "#3F7C97",
+      "attack": 5,
+      "lvl": 1
+    },
+    {
+      "id": 6,
+      "color": "#D8A6B2",
+      "attack": 6,
+      "lvl": 1
+    },
+    {
+      "id": 7,
+      "color": "#C0E842",
+      "attack": 7,
+      "lvl": 1
+    },
+    {
+      "id": 8,
+      "color": "#7F6DDB",
+      "attack": 8,
+      "lvl": 1
+    },
+    {
+      "id": 9,
+      "color": "#93B881",
+      "attack": 9,
+      "lvl": 1
+    },
+    {
+      "id": 10,
+      "color": "#FF8F7A",
+      "attack": 10,
+      "lvl": 1
+    },
+    {
+      "id": 11,
+      "color": "#B1DE91",
+      "attack": 11,
+      "lvl": 1
+    },
+    {
+      "id": 12,
+      "color": "#E372A9",
+      "attack": 12,
+      "lvl": 1
+    },
+    {
+      "id": 13,
+      "color": "#FFB037",
+      "attack": 13,
+      "lvl": 1
+    },
+    {
+      "id": 14,
+      "color": "#4B81B5",
+      "attack": 14,
+      "lvl": 1
+    },
+    {
+      "id": 15,
+      "color": "#F08192",
+      "attack": 15,
+      "lvl": 1
+    },
+    {
+      "id": 16,
+      "color": "#6FADCD",
+      "attack": 16,
+      "lvl": 1
+    },
+    {
+      "id": 17,
+      "color": "#D7B6CE",
+      "attack": 17,
+      "lvl": 1
+    },
+    {
+      "id": 18,
+      "color": "#9E8BB7",
+      "attack": 18,
+      "lvl": 1
+    },
+    {
+      "id": 19,
+      "color": "#B58E7A",
+      "attack": 19,
+      "lvl": 1
+    },
+    {
+      "id": 20,
+      "color": "#E9986D",
+      "attack": 20,
+      "lvl": 1
+    },
+    {
+      "id": 21,
+      "color": "#AF515F",
+      "attack": 21,
+      "lvl": 1
+    },
+    {
+      "id": 22,
+      "color": "#557A95",
+      "attack": 22,
+      "lvl": 1
+    }
+  ],
+  "incubators": [
+    {
+      "id": 1,
+      "heroId": 1,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    },
+    {
+      "id": 2,
+      "heroId": 2,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    },
+    {
+      "id": 3,
+      "heroId": 3,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    },
+    {
+      "id": 1,
+      "heroId": 4,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    },
+    {
+      "id": 2,
+      "heroId": 5,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    }
+  ],
+  "incubators-create": [
+    {
+      "id": 1,
+      "heroId": 1,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    },
+    {
+      "id": 2,
+      "heroId": 2,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    },
+    {
+      "id": 3,
+      "heroId": 3,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    },
+    {
+      "id": 1,
+      "heroId": 4,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    },
+    {
+      "id": 2,
+      "heroId": 5,
+      "durability": 5,
+      "eggId": null,
+      "timeStart": null,
+      "monsterId": null
+    },
+    {
+      "id": 4
+    }
+  ]
+}
