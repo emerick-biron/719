@@ -4,6 +4,7 @@ import fr.ebiron.septunneuf.incubators.dto.*
 import fr.ebiron.septunneuf.incubators.models.IncubatorStatus
 import fr.ebiron.septunneuf.incubators.services.IncubatorService
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -18,9 +19,9 @@ class IncubatorController(private val service: IncubatorService) {
         return CreateIncubatorResponse(service.createIncubator(req.heroName).id)
     }
 
-    @GetMapping("/heroes/{heroName}")
+    @GetMapping
     @ResponseBody
-    fun getHeroIncubators(@PathVariable heroName: String): GetHeroIncubatorsResponse {
+    fun getHeroIncubators(@RequestHeader(required = true, name = "heroName") @NotBlank heroName: String): GetHeroIncubatorsResponse {
         return GetHeroIncubatorsResponse(service.getHeroIncubators(heroName).map { it.id }.toList())
     }
 
