@@ -27,9 +27,9 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EggAlreadyInIncubatorException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     fun handleEggAlreadyInIncubatorException(e:EggAlreadyInIncubatorException):HttpExceptionDto{
-        return HttpExceptionDto(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.reasonPhrase, e.message)
+        return HttpExceptionDto(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.reasonPhrase, e.message)
     }
 }
