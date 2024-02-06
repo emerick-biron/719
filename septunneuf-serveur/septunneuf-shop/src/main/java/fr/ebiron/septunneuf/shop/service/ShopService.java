@@ -145,11 +145,11 @@ public class ShopService {
         httpHeaders.add("heroName", heroName);
         HttpEntity<Void> httpEntity = new HttpEntity<>(null, httpHeaders);
         ResponseEntity<ListIncubatorsResponse> response = restTemplate.exchange(serviceIncubatorsUrl, HttpMethod.GET, httpEntity, ListIncubatorsResponse.class);
-        if (response.getBody() == null || response.getBody().getIncubatorsIds() == null || response.getBody().getIncubatorsIds().isEmpty()) {
+        if (response.getBody() == null || response.getBody().getIncubatorIds() == null) {
             throw new NotFoundException("Error during request for incubators for " + heroName);
         }
 
-        if (!(response.getBody().getIncubatorsIds().size() >= 6)) {
+        if (response.getBody().getIncubatorIds().size() >= 6) {
             throw new TooManyIncubator("Hero " + heroName + " have already 6 incubators");
         }
 

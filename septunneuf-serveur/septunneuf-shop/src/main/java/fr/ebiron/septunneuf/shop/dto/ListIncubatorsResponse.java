@@ -4,16 +4,16 @@ package fr.ebiron.septunneuf.shop.dto;
 import java.util.List;
 
 public class ListIncubatorsResponse {
-    private List<Long> incubatorsIds;
+    private List<Long> incubatorIds;
 
-    public List<Long> getIncubatorsIds() {
-        return incubatorsIds;
+    public List<Long> getIncubatorIds() {
+        return incubatorIds;
     }
 
     public ListIncubatorsResponse() {
     }
 
-    public void setIncubatorsIds(List<Long> incubatorsIds) {
-        this.incubatorsIds = incubatorsIds;
+    public void setIncubatorIds(List<Long> incubatorIds) {
+        this.incubatorIds = incubatorIds;
     }
 }
