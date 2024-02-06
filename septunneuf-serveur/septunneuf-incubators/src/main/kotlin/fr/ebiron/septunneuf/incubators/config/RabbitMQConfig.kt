@@ -16,6 +16,11 @@ class RabbitMQConfig {
     }
 
     @Bean
+    fun createIncubatorQueue(): Queue {
+        return Queue("createIncubator.queue")
+    }
+
+    @Bean
     fun rabbitTemplate(connectionFactory: ConnectionFactory): RabbitTemplate {
         val rabbitTemplate = RabbitTemplate(connectionFactory)
         rabbitTemplate.messageConverter = producerJackson2MessageConverter()

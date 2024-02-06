@@ -12,13 +12,6 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/incubators")
 class IncubatorController(private val service: IncubatorService) {
 
-    @PostMapping("/create")
-    @ResponseBody
-    @ResponseStatus(HttpStatus.CREATED)
-    fun createIncubator(@Valid @RequestBody req: CreateIncubatorRequest): CreateIncubatorResponse {
-        return CreateIncubatorResponse(service.createIncubator(req.heroName).id)
-    }
-
     @GetMapping
     @ResponseBody
     fun getHeroIncubators(@RequestHeader(required = true, name = "heroName") @NotBlank heroName: String): GetHeroIncubatorsResponse {

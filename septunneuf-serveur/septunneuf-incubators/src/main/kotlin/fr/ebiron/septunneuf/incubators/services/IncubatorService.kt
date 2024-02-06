@@ -1,10 +1,10 @@
 package fr.ebiron.septunneuf.incubators.services
 
-import fr.ebiron.septunneuf.incubators.dto.CreateMonsterRequestMessage
 import fr.ebiron.septunneuf.incubators.exceptions.EggAlreadyInIncubatorException
 import fr.ebiron.septunneuf.incubators.exceptions.NotFoundException
 import fr.ebiron.septunneuf.incubators.exceptions.TooManyIncubatorException
 import fr.ebiron.septunneuf.incubators.models.Incubator
+import fr.ebiron.septunneuf.incubators.publishers.IncubatorPublisher
 import fr.ebiron.septunneuf.incubators.repositories.IncubatorRepository
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.scheduling.annotation.Scheduled
@@ -17,7 +17,7 @@ import kotlin.time.toJavaDuration
 class IncubatorService(
     private val db: IncubatorRepository,
     private val sequenceGeneratorService: SequenceGeneratorService,
-    private val rabbitMQSenderService: RabbitMQSenderService
+    private val incubatorPublisher: IncubatorPublisher
 ) {
     fun createIncubator(heroName: String): Incubator {
         val ownedIncubators: List<Incubator> = getHeroIncubators(heroName)
@@ -25,7 +25,6 @@ class IncubatorService(
         if (ownedIncubators.size >= 6) {
             throw TooManyIncubatorException("Hero $heroName has already 6 incubators")
         }
-        // TODO : call shop service (POST) /shop/incubator
         val id = sequenceGeneratorService.generateSequence(Incubator.SEQUENCE_NAME)
         val incubator = Incubator(id, heroName)
         db.save(incubator)
@@ -57,7 +56,7 @@ class IncubatorService(
         val incubatorsWithEggHatched = db.findByHatchingDateTimeBefore(now)
 
         incubatorsWithEggHatched.forEach {
-            rabbitMQSenderService.sendCreateMonsterMessage(CreateMonsterRequestMessage(it.heroName))
+            incubatorPublisher.sendCreateMonsterMessage(it.heroName)
         }
 
         val (toSave, toDelete) = incubatorsWithEggHatched.map { incubator ->
