@@ -14,13 +14,15 @@ import java.util.*
 @Service
 class EggService(private val db: EggRepository, private val sequenceGeneratorService: SequenceGeneratorService) {
 
-    fun generateEgg(): Egg {
-        val id = sequenceGeneratorService.generateSequence(Egg.SEQUENCE_NAME)
-        val color = randomHexColor()
-        val incubationTime = randomIncubationTime()
-        val egg = Egg(id, color, incubationTime)
-        db.save(egg)
-        return egg
+    fun generateEgg(quantity: Int): List<Egg> {
+        val eggs = List(quantity) {
+            val id = sequenceGeneratorService.generateSequence(Egg.SEQUENCE_NAME)
+            val color = randomHexColor()
+            val incubationTime = randomIncubationTime()
+            Egg(id, color, incubationTime)
+        }
+        db.saveAll(eggs)
+        return eggs
     }
 
     fun getEggById(eggId: Long): Egg {
