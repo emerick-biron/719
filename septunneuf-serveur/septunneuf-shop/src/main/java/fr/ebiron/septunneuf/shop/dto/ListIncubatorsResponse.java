@@ -10,6 +10,9 @@ public class ListIncubatorsResponse {
         return incubatorsIds;
     }
 
+    public ListIncubatorsResponse() {
+    }
+
     public void setIncubatorsIds(List<Long> incubatorsIds) {
         this.incubatorsIds = incubatorsIds;
     }

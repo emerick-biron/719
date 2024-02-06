@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -40,7 +42,7 @@ public class ShopService {
         this.rabbitMQProducer = rabbitMQProducer;
     }
 
-    public List<Egg> getEggs(){
+    public List<Egg> getEggs() {
         return eggBD.findAll();
     }
 
@@ -62,21 +64,21 @@ public class ShopService {
     }
 
     public void createHeroWallet(String heroName) throws ConflictException {
-        if (heroBD.existsById(heroName)){
-            throw new ConflictException("Wallet for "+heroName+" already exist");
+        if (heroBD.existsById(heroName)) {
+            throw new ConflictException("Wallet for " + heroName + " already exist");
         }
         Hero hero = new Hero(heroName, 25);
         heroBD.save(hero);
         return;
     }
 
-    public long purchaseEgg(long eggId, String heroName) throws NotFoundException, NotEnoughtMoney{
-        Egg egg = eggBD.findById(eggId).orElseThrow(()->new NotFoundException("Egg #"+eggId+" dosn't exist"));
-        Hero hero = heroBD.findById(heroName).orElseThrow(()->new NotFoundException("Hero "+heroName+" dosn't exist"));
-        if (hero.getMoney() < egg.getPrice()){
-            throw new NotEnoughtMoney("Hero "+heroName+" don't have money to buy egg #"+eggId);
+    public long purchaseEgg(long eggId, String heroName) throws NotFoundException, NotEnoughtMoney {
+        Egg egg = eggBD.findById(eggId).orElseThrow(() -> new NotFoundException("Egg #" + eggId + " dosn't exist"));
+        Hero hero = heroBD.findById(heroName).orElseThrow(() -> new NotFoundException("Hero " + heroName + " dosn't exist"));
+        if (hero.getMoney() < egg.getPrice()) {
+            throw new NotEnoughtMoney("Hero " + heroName + " don't have money to buy egg #" + eggId);
         }
-        hero.setMoney(hero.getMoney()-egg.getPrice());
+        hero.setMoney(hero.getMoney() - egg.getPrice());
         heroBD.save(hero);
         eggBD.deleteById(eggId);
         rabbitMQProducer.sendAddEggToInventoryMessage(new EggToInventoryMessage(eggId, heroName));
@@ -85,22 +87,22 @@ public class ShopService {
     }
 
     public long sellEgg(long eggId, String heroName) throws NotFoundException, NotOwned {
-        Hero hero = heroBD.findById(heroName).orElseThrow(()->new NotFoundException("Hero "+heroName+" dosn't exist"));
+        Hero hero = heroBD.findById(heroName).orElseThrow(() -> new NotFoundException("Hero " + heroName + " dosn't exist"));
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("heroName", heroName);
         HttpEntity<Void> httpEntity = new HttpEntity<>(null, httpHeaders);
-        ListEggsResponse response = restTemplate.getForObject(serviceInventoryUrl +"/eggs", ListEggsResponse.class, httpEntity);
+        ListEggsResponse response = restTemplate.getForObject(serviceInventoryUrl + "/eggs", ListEggsResponse.class, httpEntity);
 
         if (response.getEggIds() == null || response.getEggIds().isEmpty()) {
-            throw new NotFoundException("Error during request for eggs for "+heroName);
+            throw new NotFoundException("Error during request for eggs for " + heroName);
         }
 
-        if (!response.getEggIds().contains(eggId)){
-            throw new NotOwned("Hero "+heroName+" don't have egg #"+eggId);
+        if (!response.getEggIds().contains(eggId)) {
+            throw new NotOwned("Hero " + heroName + " don't have egg #" + eggId);
         }
 
-        hero.setMoney(hero.getMoney()+RandomGenerators.randomEggPrice());
+        hero.setMoney(hero.getMoney() + RandomGenerators.randomEggPrice());
         heroBD.save(hero);
         rabbitMQProducer.sendRemoveEggToInventoryMessage(new EggToInventoryMessage(eggId, heroName));
 
@@ -109,22 +111,22 @@ public class ShopService {
 
 
     public long sellMonster(long monsterId, String heroName) throws NotFoundException, NotOwned {
-        Hero hero = heroBD.findById(heroName).orElseThrow(()->new NotFoundException("Hero "+heroName+" dosn't exist"));
+        Hero hero = heroBD.findById(heroName).orElseThrow(() -> new NotFoundException("Hero " + heroName + " dosn't exist"));
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("heroName", heroName);
         HttpEntity<Void> httpEntity = new HttpEntity<>(null, httpHeaders);
-        ListMonstersResponse response = restTemplate.getForObject(serviceInventoryUrl +"/monsters", ListMonstersResponse.class, httpEntity);
+        ListMonstersResponse response = restTemplate.getForObject(serviceInventoryUrl + "/monsters", ListMonstersResponse.class, httpEntity);
 
         if (response.getMonsterIds() == null || response.getMonsterIds().isEmpty()) {
-            throw new NotFoundException("Error during request for monster for "+heroName);
+            throw new NotFoundException("Error during request for monster for " + heroName);
         }
 
-        if (!response.getMonsterIds().contains(monsterId)){
-            throw new NotOwned("Hero "+heroName+" don't have monster #"+monsterId);
+        if (!response.getMonsterIds().contains(monsterId)) {
+            throw new NotOwned("Hero " + heroName + " don't have monster #" + monsterId);
         }
 
-        hero.setMoney(hero.getMoney()+RandomGenerators.randomMonsterPrice());
+        hero.setMoney(hero.getMoney() + RandomGenerators.randomMonsterPrice());
         heroBD.save(hero);
         rabbitMQProducer.sendRemoveMonsterToInventoryMessage(new MonsterToInventoryMessage(monsterId, heroName));
 
@@ -133,26 +135,25 @@ public class ShopService {
 
     public long buyIncubator(String heroName) throws NotFoundException, TooManyIncubator, NotEnoughtMoney {
         int incubatorPrice = 10;
-        Hero hero = heroBD.findById(heroName).orElseThrow(()->new NotFoundException("Hero "+heroName+" dosn't exist"));
+        Hero hero = heroBD.findById(heroName).orElseThrow(() -> new NotFoundException("Hero " + heroName + " dosn't exist"));
 
-        if (hero.getMoney() < incubatorPrice){
-            throw new NotEnoughtMoney("Hero "+heroName+" don't have money to buy an incubator");
+        if (hero.getMoney() < incubatorPrice) {
+            throw new NotEnoughtMoney("Hero " + heroName + " don't have money to buy an incubator");
         }
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("heroName", heroName);
         HttpEntity<Void> httpEntity = new HttpEntity<>(null, httpHeaders);
-        ListIncubatorsResponse response = restTemplate.getForObject(serviceIncubatorsUrl +"/monsters", ListIncubatorsResponse.class, httpEntity);
-
-        if (response.getIncubatorsIds() == null || response.getIncubatorsIds().isEmpty()) {
-            throw new NotFoundException("Error during request for incubators for "+heroName);
+        ResponseEntity<ListIncubatorsResponse> response = restTemplate.exchange(serviceIncubatorsUrl, HttpMethod.GET, httpEntity, ListIncubatorsResponse.class);
+        if (response.getBody() == null || response.getBody().getIncubatorsIds() == null || response.getBody().getIncubatorsIds().isEmpty()) {
+            throw new NotFoundException("Error during request for incubators for " + heroName);
         }
 
-        if (!(response.getIncubatorsIds().size() >= 6)){
-            throw new TooManyIncubator("Hero "+heroName+" have already 6 incubators");
+        if (!(response.getBody().getIncubatorsIds().size() >= 6)) {
+            throw new TooManyIncubator("Hero " + heroName + " have already 6 incubators");
         }
 
-        hero.setMoney(hero.getMoney()-incubatorPrice);
+        hero.setMoney(hero.getMoney() - incubatorPrice);
         heroBD.save(hero);
         rabbitMQProducer.sendCreateIncubatorMessage(new CreateIncubatorMessage(heroName));
 
