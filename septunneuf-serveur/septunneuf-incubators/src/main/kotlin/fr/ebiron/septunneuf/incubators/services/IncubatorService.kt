@@ -21,7 +21,6 @@ class IncubatorService(
 ) {
     fun createIncubator(heroName: String): Incubator {
         val ownedIncubators: List<Incubator> = getHeroIncubators(heroName)
-        println(ownedIncubators)
         if (ownedIncubators.size >= 6) {
             throw TooManyIncubatorException("Hero $heroName has already 6 incubators")
         }
