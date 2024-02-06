@@ -23,6 +23,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue deleteMonsterQueue(){
+        return new Queue("deleteMonster.queue");
+    }
+
+    @Bean
     public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
