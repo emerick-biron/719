@@ -7,6 +7,8 @@ import fr.ebiron.septunneuf.heroes.model.Hero;
 import fr.ebiron.septunneuf.heroes.repository.HeroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ public class HeroService {
     private final HeroRepository bd;
 
     @Value("${septunneuf.shop.service.url}")
-    private String serviceUrl;
+    private String serviceShopUrl;
 
     @Autowired
     public HeroService(HeroRepository bd) {
@@ -28,7 +30,10 @@ public class HeroService {
     @ExceptionHandler
     public Hero createHero(String nom, String color) throws ConflictException {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Void> response = restTemplate.postForEntity(serviceUrl+"/shop/heroes/"+nom+"/wallet/create", new CreateWalletRequest(nom), Void.class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("heroName", nom);
+        HttpEntity<Void> httpEntity = new HttpEntity<>(null, httpHeaders);
+        ResponseEntity<Void> response = restTemplate.postForEntity(serviceShopUrl +"/shop/wallet/create", httpEntity, Void.class);
 
         if (!(response.getStatusCode() == HttpStatusCode.valueOf(201))) {
             throw new ConflictException("Hero wallet "+nom+" already exist");

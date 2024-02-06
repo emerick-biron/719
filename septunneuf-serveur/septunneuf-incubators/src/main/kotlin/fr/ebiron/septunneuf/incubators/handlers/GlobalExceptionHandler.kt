@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 @ControllerAdvice
 class GlobalExceptionHandler {
     @ExceptionHandler(TooManyIncubatorException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     fun handleTooManyIncubatorException(e: TooManyIncubatorException): HttpExceptionDto {
         return HttpExceptionDto(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.reasonPhrase, e.message)
