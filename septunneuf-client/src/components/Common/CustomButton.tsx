@@ -1,6 +1,6 @@
 interface ButtonProps {
-    text: string;
-    color: string;
+    text?: string;
+    color?: string;
     onClick: () => void;
     disabled?: boolean;
 }
@@ -11,9 +11,12 @@ const CustomButton = (props: ButtonProps ) => {
     return (
         <button 
             onClick={onClick} 
-            style={{ backgroundColor: disabled ? 'gray' : color }} 
             disabled={disabled}
-            className="rounded px-4 py-2 m-2"
+            className={`rounded px-4 py-2 m-2 ${
+                disabled
+                  ? 'bg-gray-500 cursor-not-allowed'
+                  : `bg-${color}-300 hover:bg-${color}-400 cursor-pointer`
+              }`}
         >
             {text}
         </button>

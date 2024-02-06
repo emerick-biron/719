@@ -1,12 +1,17 @@
-import Incubator from "../Common/Incubator"
+import Incubator from "../Incubator/Incubator"
 import ShopNavBar from "./ShopNavBar"
+import EggsShop from "../Egg.tsx/EggsShop"
 
 const ShopBuyView = () => {
     return (
-        <div className="mt-20">
-             <ShopNavBar />
-            <h1 className="font-bold text-2xl">Incubateurs</h1>
+        <div className="mt-20 mx-20">
+            <ShopNavBar />
             <Incubator />
+            <br />
+            <EggsShop 
+                CustomButtonLabel="Acheter"
+                color="red"
+            />
         </div>
     )
 }

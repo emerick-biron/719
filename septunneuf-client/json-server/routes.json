@@ -1,5 +1,7 @@
 {
     "/inventory/eggs": "/eggs",
     "/inventory/monsters": "/monsters",
-    "/incubators/create": "/incubators-create"
+    "/incubators/create": "/incubators-create",
+    "/shop/items": "/shop-items",
+    "/heroes/louis/details": "/heroes-login"
 }
