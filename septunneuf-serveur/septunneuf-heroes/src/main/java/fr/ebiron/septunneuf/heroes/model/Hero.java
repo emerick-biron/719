@@ -10,11 +10,13 @@ public class Hero {
     private String name;
     private String color;
 
+    public Hero() {
+    }
+
     public Hero(String nom, String color) {
         this.name = nom;
         this.color = color;
     }
-
 
     public String getName() {
         return name;
