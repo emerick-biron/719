@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/heroes")
 public class HeroController {
@@ -27,7 +28,7 @@ public class HeroController {
     @ResponseStatus(HttpStatus.CREATED)
     public CreateHeroResponse createHero(@Valid @RequestBody CreateHeroRequest req) throws ConflictException {
         Hero hero = heroService.createHero(req.getName(), req.getColor());
-        return new CreateHeroResponse(hero.getName());
+        return new CreateHeroResponse(hero.getName(), hero.getColor());
     }
 
     @GetMapping("/{heroName}/details")
