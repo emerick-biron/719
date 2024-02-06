@@ -14,8 +14,8 @@ class IncubatorController(private val service: IncubatorService) {
     @PostMapping("/create")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    fun createIncubator(@Valid @RequestBody req: CreateIncubatorRequest): IdResponse {
-        return IdResponse(service.createIncubator(req.heroName).id)
+    fun createIncubator(@Valid @RequestBody req: CreateIncubatorRequest): CreateIncubatorResponse {
+        return CreateIncubatorResponse(service.createIncubator(req.heroName).id)
     }
 
     @GetMapping("/heroes/{heroName}")
