@@ -23,6 +23,7 @@ class IncubatorService(
         if (ownedIncubators.size >= 6) {
             throw TooManyIncubatorException("Hero $heroName has already 6 incubators")
         }
+        // TODO : call shop service (POST) /shop/incubator
         val id = sequenceGeneratorService.generateSequence(Incubator.SEQUENCE_NAME)
         val incubator = Incubator(id, heroName)
         db.save(incubator)
@@ -46,16 +47,22 @@ class IncubatorService(
 
     @Scheduled(fixedRate = 5000)
     fun checkEggHatching() {
-        val incubatorsWithEggHatched = db.findByHatchingDateTimeBefore(LocalDateTime.now())
-            .map {
-            it.apply {
-                eggId = null
-                hatchingDateTime = null
-            }
-        }
-        db.saveAll(incubatorsWithEggHatched)
+        val now = LocalDateTime.now()
+        val incubatorsWithEggHatched = db.findByHatchingDateTimeBefore(now)
+
         incubatorsWithEggHatched.forEach {
             rabbitMQSenderService.sendCreateMonsterMessage(CreateMonsterRequestMessage(it.heroName))
         }
+
+        val (toSave, toDelete) = incubatorsWithEggHatched.map { incubator ->
+            incubator.apply {
+                eggId = null
+                hatchingDateTime = null
+                durability--
+            }
+        }.partition { it.durability > 0 }
+
+        db.saveAll(toSave)
+        db.deleteAll(toDelete)
     }
 }
