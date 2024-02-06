@@ -8,8 +8,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
-
 
 @Configuration
 public class RabbitMQConfig {
@@ -17,6 +15,11 @@ public class RabbitMQConfig {
     @Bean
     public Queue addToInventoryQueue(){
         return new Queue("addMonsterToInventory.queue");
+    }
+
+    @Bean
+    public Queue createMonsterQueue(){
+        return new Queue("createMonster.queue");
     }
 
     @Bean

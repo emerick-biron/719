@@ -5,8 +5,6 @@
       <module name="septunneuf-incubator" target="17" />
       <module name="septunneuf-incubator.main" target="17" />
       <module name="septunneuf-incubator.test" target="17" />
-      <module name="septunneuf-incubators.main" target="17" />
-      <module name="septunneuf-incubators.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

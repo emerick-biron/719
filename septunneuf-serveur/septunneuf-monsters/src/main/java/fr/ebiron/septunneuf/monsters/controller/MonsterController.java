@@ -1,6 +1,6 @@
 package fr.ebiron.septunneuf.monsters.controller;
 
-import fr.ebiron.septunneuf.monsters.dto.CreateMonsterResponse;
+import fr.ebiron.septunneuf.monsters.dto.AddMonsterToInventoryMessage;
 import fr.ebiron.septunneuf.monsters.dto.GetMonsterDetailsResponse;
 import fr.ebiron.septunneuf.monsters.dto.ReleaseMonsterResponse;
 import fr.ebiron.septunneuf.monsters.exception.NotFoundException;
@@ -20,20 +20,13 @@ public class MonsterController {
         this.monsterService = monsterService;
     }
 
-    @PostMapping("/create")
-    @ResponseBody
-    @ResponseStatus(HttpStatus.CREATED)
-    public CreateMonsterResponse createHero(){
-        Monster monster = monsterService.createMonster();
-        return new CreateMonsterResponse(monster.getName(), monster.getColor());
-    }
-
     @GetMapping("/{monsterId}/details")
     @ResponseBody
     public GetMonsterDetailsResponse GetMonsterDetails(@PathVariable long monsterId) throws NotFoundException {
         Monster monster = monsterService.getMonster(monsterId);
         return new GetMonsterDetailsResponse(monster);
     }
+
 
     @DeleteMapping("/{monsterId}/release")
     @ResponseBody
