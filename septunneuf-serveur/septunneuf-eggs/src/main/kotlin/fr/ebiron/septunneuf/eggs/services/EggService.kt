@@ -33,8 +33,7 @@ class EggService(private val db: EggRepository, private val sequenceGeneratorSer
         return egg
     }
 
-    @RabbitListener(queues = ["removeEggs.queue"])
-    fun cleaningNonPurchasedEggs(message: RemoveEggsMessage) {
-        db.deleteAllById(message.eggIds)
+    fun deleteEggsById(eggIds: List<Long>) {
+        db.deleteAllById(eggIds)
     }
 }
