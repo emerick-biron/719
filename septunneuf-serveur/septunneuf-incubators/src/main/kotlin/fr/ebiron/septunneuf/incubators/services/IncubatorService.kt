@@ -57,7 +57,10 @@ class IncubatorService(
         incubatorsWithEggHatched.forEach {
             incubatorPublisher.sendCreateMonsterMessage(it.heroName)
         }
-        incubatorPublisher.sendRemoveEggsMessage(incubatorsWithEggHatched.mapNotNull { it.eggId }.toList())
+        val eggsToRemove = incubatorsWithEggHatched.mapNotNull { it.eggId }.toList()
+        if (eggsToRemove.isNotEmpty()) {
+            incubatorPublisher.sendRemoveEggsMessage(eggsToRemove)
+        }
         val (toSave, toDelete) = incubatorsWithEggHatched.map { incubator ->
             incubator.apply {
                 eggId = null
