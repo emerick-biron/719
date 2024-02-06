@@ -2,23 +2,23 @@ package fr.ebiron.septunneuf.monsters.dto;
 
 public class AddMonsterToInventoryMessage {
 
-    private long id;
+    private long monsterId;
     private String heroName;
 
     public AddMonsterToInventoryMessage() {
     }
 
-    public AddMonsterToInventoryMessage(long id, String heroName) {
-        this.id = id;
+    public AddMonsterToInventoryMessage(long monsterId, String heroName) {
+        this.monsterId = monsterId;
         this.heroName = heroName;
     }
 
-    public long getId() {
-        return id;
+    public long getMonsterId() {
+        return monsterId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setMonsterId(long monsterId) {
+        this.monsterId = monsterId;
     }
 
     public String getHeroName() {
