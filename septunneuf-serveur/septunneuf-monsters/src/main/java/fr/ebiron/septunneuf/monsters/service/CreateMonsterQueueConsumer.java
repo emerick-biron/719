@@ -3,6 +3,9 @@ package fr.ebiron.septunneuf.monsters.service;
 
 import fr.ebiron.septunneuf.monsters.dto.AddMonsterToInventoryMessage;
 import fr.ebiron.septunneuf.monsters.dto.CreateMonsterMessage;
+import fr.ebiron.septunneuf.monsters.dto.DeleteMonsterMessage;
+import fr.ebiron.septunneuf.monsters.dto.ReleaseMonsterResponse;
+import fr.ebiron.septunneuf.monsters.exception.NotFoundException;
 import fr.ebiron.septunneuf.monsters.model.Monster;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,4 +27,10 @@ public class CreateMonsterQueueConsumer {
         Monster monster = monsterService.createMonster();
         addMonsterToInventoryQueue.sendAddToInventoryMessage(new AddMonsterToInventoryMessage(monster.getId(), message.getHeroName()));
     }
+
+    @RabbitListener(queues = "deleteMonster.queue")
+    public void ReleaseMonster(DeleteMonsterMessage message) throws NotFoundException {
+         monsterService.releaseMonster(message.getMonsterId());
+    }
+
 }

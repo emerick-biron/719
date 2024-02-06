@@ -57,7 +57,7 @@ class IncubatorService(
         incubatorsWithEggHatched.forEach {
             incubatorPublisher.sendCreateMonsterMessage(it.heroName)
         }
-
+        // TODO : send message to eggService to delete hatched eggs
         val (toSave, toDelete) = incubatorsWithEggHatched.map { incubator ->
             incubator.apply {
                 eggId = null

@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.io.Serializable;
 
-
-@JsonAutoDetect
 public class CreateMonsterMessage implements Serializable {
     private String heroName;
 

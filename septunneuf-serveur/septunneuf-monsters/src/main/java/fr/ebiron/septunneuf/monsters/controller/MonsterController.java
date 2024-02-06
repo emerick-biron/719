@@ -26,14 +26,4 @@ public class MonsterController {
         Monster monster = monsterService.getMonster(monsterId);
         return new GetMonsterDetailsResponse(monster);
     }
-
-
-    @DeleteMapping("/{monsterId}/release")
-    @ResponseBody
-    public ReleaseMonsterResponse ReleaseMonster(@PathVariable long monsterId) throws NotFoundException {
-
-        Monster monster = monsterService.releaseMonster(monsterId);
-        return new ReleaseMonsterResponse(monster.getId());
-    }
-
 }
