@@ -131,8 +131,13 @@ public class ShopService {
         return hero.getMoney();
     }
 
-    public long buyIncubator(String heroName) throws NotFoundException, TooManyIncubator {
+    public long buyIncubator(String heroName) throws NotFoundException, TooManyIncubator, NotEnoughtMoney {
+        int incubatorPrice = 10;
         Hero hero = heroBD.findById(heroName).orElseThrow(()->new NotFoundException("Hero "+heroName+" dosn't exist"));
+
+        if (hero.getMoney() < incubatorPrice){
+            throw new NotEnoughtMoney("Hero "+heroName+" don't have money to buy an incubator");
+        }
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("heroName", heroName);
@@ -147,9 +152,9 @@ public class ShopService {
             throw new TooManyIncubator("Hero "+heroName+" have already 6 incubators");
         }
 
-        hero.setMoney(hero.getMoney()+RandomGenerators.randomMonsterPrice());
+        hero.setMoney(hero.getMoney()-incubatorPrice);
         heroBD.save(hero);
-        rabbitMQProducer.sendRemoveMonsterToInventoryMessage(new MonsterToInventoryMessage(monsterId, heroName));
+        rabbitMQProducer.sendCreateIncubatorMessage(new CreateIncubatorMessage(heroName));
 
         return hero.getMoney();
     }

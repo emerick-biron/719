@@ -1,5 +1,6 @@
 package fr.ebiron.septunneuf.shop.service;
 
+import fr.ebiron.septunneuf.shop.dto.CreateIncubatorMessage;
 import fr.ebiron.septunneuf.shop.dto.EggToInventoryMessage;
 import fr.ebiron.septunneuf.shop.dto.MonsterToInventoryMessage;
 import fr.ebiron.septunneuf.shop.dto.RemoveEggsMessage;
@@ -30,5 +31,9 @@ public class RabbitMQProducer {
 
     public void sendRemoveMonsterToInventoryMessage(MonsterToInventoryMessage message) {
         rabbitTemplate.convertAndSend("removeMonsterToInventory.queue", message);
+    }
+
+    public void sendCreateIncubatorMessage(CreateIncubatorMessage message){
+        rabbitTemplate.convertAndSend("createIncubator.queue", message);
     }
 }

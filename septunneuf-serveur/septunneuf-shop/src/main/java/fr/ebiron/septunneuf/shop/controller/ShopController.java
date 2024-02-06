@@ -71,7 +71,7 @@ public class ShopController {
     @ResponseBody
     public MoneyResponse shopIncubator(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName
-    ) throws NotFoundException, TooManyIncubator {
+    ) throws NotFoundException, TooManyIncubator, NotEnoughtMoney {
         long money = shopService.buyIncubator(heroName);
         return new MoneyResponse(money);
     }
