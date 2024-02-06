@@ -1,6 +1,7 @@
 package fr.ebiron.septunneuf.incubators.handlers
 
 import fr.ebiron.septunneuf.incubators.dto.HttpExceptionDto
+import fr.ebiron.septunneuf.incubators.exceptions.EggAlreadyInIncubatorException
 import fr.ebiron.septunneuf.incubators.exceptions.NotFoundException
 import fr.ebiron.septunneuf.incubators.exceptions.TooManyIncubatorException
 import org.springframework.http.HttpStatus
@@ -23,5 +24,12 @@ class GlobalExceptionHandler {
     @ResponseBody
     fun handleNotFoundException(e: NotFoundException): HttpExceptionDto {
         return HttpExceptionDto(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.reasonPhrase, e.message)
+    }
+
+    @ExceptionHandler(EggAlreadyInIncubatorException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    fun handleEggAlreadyInIncubatorException(e:EggAlreadyInIncubatorException):HttpExceptionDto{
+        return HttpExceptionDto(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.reasonPhrase, e.message)
     }
 }

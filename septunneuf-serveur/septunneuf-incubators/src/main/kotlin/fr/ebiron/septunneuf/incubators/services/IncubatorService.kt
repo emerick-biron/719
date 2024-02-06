@@ -1,10 +1,12 @@
 package fr.ebiron.septunneuf.incubators.services
 
 import fr.ebiron.septunneuf.incubators.dto.CreateMonsterRequestMessage
+import fr.ebiron.septunneuf.incubators.exceptions.EggAlreadyInIncubatorException
 import fr.ebiron.septunneuf.incubators.exceptions.NotFoundException
 import fr.ebiron.septunneuf.incubators.exceptions.TooManyIncubatorException
 import fr.ebiron.septunneuf.incubators.models.Incubator
 import fr.ebiron.septunneuf.incubators.repositories.IncubatorRepository
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -42,7 +44,11 @@ class IncubatorService(
         val incubator = getIncubatorById(incubatorId)
         incubator.eggId = eggId
         incubator.hatchingDateTime = LocalDateTime.now().plus(incubationTime.toJavaDuration())
-        db.save(incubator)
+        try {
+            db.save(incubator)
+        } catch (e: DuplicateKeyException) {
+            throw EggAlreadyInIncubatorException("Egg $eggId is already in an incubator")
+        }
     }
 
     @Scheduled(fixedRate = 5000)
