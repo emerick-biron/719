@@ -1,6 +1,7 @@
 package fr.ebiron.septunneuf.incubators.publishers
 
 import fr.ebiron.septunneuf.incubators.dto.CreateMonsterRequestMessage
+import fr.ebiron.septunneuf.incubators.dto.RemoveEggsMessage
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Service
 
@@ -9,5 +10,9 @@ class IncubatorPublisher(private val rabbitTemplate: RabbitTemplate) {
 
     fun sendCreateMonsterMessage(heroName: String) {
         rabbitTemplate.convertAndSend("createMonster.queue", CreateMonsterRequestMessage(heroName))
+    }
+
+    fun sendRemoveEggsMessage(eggIds:List<Long>){
+        rabbitTemplate.convertAndSend("removeEggs.queue", RemoveEggsMessage(eggIds))
     }
 }

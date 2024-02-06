@@ -16,6 +16,11 @@ class RabbitMQConfig {
     }
 
     @Bean
+    fun removeEggsQueue(): Queue {
+        return Queue("removeEggs.queue")
+    }
+
+    @Bean
     fun createIncubatorQueue(): Queue {
         return Queue("createIncubator.queue")
     }
