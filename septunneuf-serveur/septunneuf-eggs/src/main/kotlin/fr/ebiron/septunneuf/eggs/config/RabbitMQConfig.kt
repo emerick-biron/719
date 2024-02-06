@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class RabbitMQConfig {
     @Bean
-    fun cleaningNonPurchasedEggsQueue(): Queue {
-        return Queue("cleaningNonPurchasedEggs.queue")
+    fun removeEggsQueue(): Queue {
+        return Queue("removeEggs.queue")
     }
 
     @Bean

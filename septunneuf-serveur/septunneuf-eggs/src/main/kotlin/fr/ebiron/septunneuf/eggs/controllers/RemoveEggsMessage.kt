@@ -1,5 +1,5 @@
 package fr.ebiron.septunneuf.eggs.controllers
 
-data class CleaningNonPurchasedEggsMessage(
+data class RemoveEggsMessage(
     val eggIds:List<Long>
 )

@@ -1,17 +1,13 @@
 package fr.ebiron.septunneuf.eggs.services
 
-import fr.ebiron.septunneuf.eggs.controllers.CleaningNonPurchasedEggsMessage
+import fr.ebiron.septunneuf.eggs.controllers.RemoveEggsMessage
 import fr.ebiron.septunneuf.eggs.exceptions.NotFoundException
 import fr.ebiron.septunneuf.eggs.models.Egg
 import fr.ebiron.septunneuf.eggs.repositories.EggRepository
 import fr.ebiron.septunneuf.eggs.utils.randomHexColor
 import fr.ebiron.septunneuf.eggs.utils.randomIncubationTime
 import org.springframework.amqp.rabbit.annotation.RabbitListener
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 @Service
 class EggService(private val db: EggRepository, private val sequenceGeneratorService: SequenceGeneratorService) {
@@ -37,8 +33,8 @@ class EggService(private val db: EggRepository, private val sequenceGeneratorSer
         return egg
     }
 
-    @RabbitListener(queues = ["cleaningNonPurchasedEggs.queue"])
-    fun cleaningNonPurchasedEggs(message: CleaningNonPurchasedEggsMessage) {
+    @RabbitListener(queues = ["removeEggs.queue"])
+    fun cleaningNonPurchasedEggs(message: RemoveEggsMessage) {
         db.deleteAllById(message.eggIds)
     }
 }
