@@ -9,5 +9,5 @@ import org.springframework.scheduling.annotation.EnableScheduling
 class SeptunneufIncubatorApplication
 
 fun main(args: Array<String>) {
-	runApplication<SeptunneufIncubatorApplication>(*args)
+    runApplication<SeptunneufIncubatorApplication>(*args)
 }

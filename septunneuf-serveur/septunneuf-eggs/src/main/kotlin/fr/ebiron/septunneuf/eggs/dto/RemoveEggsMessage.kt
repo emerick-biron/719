@@ -1,4 +1,4 @@
-package fr.ebiron.septunneuf.incubators.dto
+package fr.ebiron.septunneuf.eggs.dto
 
 data class RemoveEggsMessage(
     val eggIds: List<Long>

@@ -5,6 +5,7 @@ import fr.ebiron.septunneuf.inventory.exceptions.MonsterInventoryNotFound
 import fr.ebiron.septunneuf.inventory.models.MonsterInventory
 import fr.ebiron.septunneuf.inventory.publisher.MonsterInventoryPublisher
 import fr.ebiron.septunneuf.inventory.repositories.MonsterInventoryRepository
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrElse
 
@@ -14,11 +15,14 @@ class MonsterInventoryService(
     private val monsterInventoryPublisher: MonsterInventoryPublisher
 ) {
 
+    private val log = LoggerFactory.getLogger(javaClass)
+
     fun removeMonsterToInventory(heroName: String, monsterId: Long): MonsterInventory {
         val monsterInventory = db.findById(heroName)
             .orElseThrow { MonsterInventoryNotFound("MonsterInventory not found for hero $heroName") }
         monsterInventory.monsterIds.remove(monsterId)
         db.save(monsterInventory)
+        log.info("Monster with id $monsterId delete from $heroName inventory")
         return monsterInventory
     }
 
@@ -39,11 +43,11 @@ class MonsterInventoryService(
         }
         monsterInventory.monsterIds.add(monsterId)
         db.save(monsterInventory)
+        log.info("Monster with id $monsterId added to $heroName inventory")
         return monsterInventory
     }
 
     fun getMonsterInventory(heroName: String): MonsterInventory {
-       return db.findById(heroName).getOrElse { MonsterInventory(heroName) }
+        return db.findById(heroName).getOrElse { MonsterInventory(heroName) }
     }
-
 }

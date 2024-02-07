@@ -5,6 +5,8 @@ import fr.ebiron.septunneuf.shop.dto.getEggsResponse;
 import fr.ebiron.septunneuf.shop.exception.*;
 import fr.ebiron.septunneuf.shop.service.ShopService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 public class ShopController {
     private final ShopService shopService;
 
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     public ShopController(ShopService shopService) {
         this.shopService = shopService;
     }
@@ -20,12 +24,14 @@ public class ShopController {
     @PostMapping("/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void shopUpdate() throws NotFoundException {
+        log.info("POST /shop/update");
         shopService.updateEggs();
     }
 
     @GetMapping("/eggs")
     @ResponseBody
     public getEggsResponse GetEggs() {
+        log.info("GET /shop/eggs");
         return new getEggsResponse(shopService.getEggs());
     }
 
@@ -34,6 +40,7 @@ public class ShopController {
     public void createHeroWallet(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName
     ) throws ConflictException {
+        log.info("POST /shop/wallet/create - heroName='{}'", heroName);
         shopService.createHeroWallet(heroName);
     }
 
@@ -43,6 +50,7 @@ public class ShopController {
             @RequestHeader(required = true, name = "heroName") @Valid String heroName,
             @PathVariable long eggId
     ) throws NotFoundException, NotEnoughtMoney {
+        log.info("POST /shop/eggs/{}/purchase - heroName='{}'", eggId, heroName);
         long money = shopService.purchaseEgg(eggId, heroName);
         return new MoneyResponse(money);
     }
@@ -53,16 +61,18 @@ public class ShopController {
             @RequestHeader(required = true, name = "heroName") @Valid String heroName,
             @PathVariable long eggId
     ) throws NotFoundException, NotOwned {
+        log.info("POST /shop/eggs/{}/sell - heroName='{}'", eggId, heroName);
         long money = shopService.sellEgg(eggId, heroName);
         return new MoneyResponse(money);
     }
 
-    @PostMapping("/monster/{monsterId}/sell")
+    @PostMapping("/monsters/{monsterId}/sell")
     @ResponseBody
     public MoneyResponse monsterSell(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName,
             @PathVariable long monsterId
     ) throws NotFoundException, NotOwned {
+        log.info("POST /shop/monsters/{}/sell - heroName='{}'", monsterId, heroName);
         long money = shopService.sellMonster(monsterId, heroName);
         return new MoneyResponse(money);
     }
@@ -72,6 +82,7 @@ public class ShopController {
     public MoneyResponse shopIncubator(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName
     ) throws NotFoundException, TooManyIncubator, NotEnoughtMoney {
+        log.info("POST /shop/incubator - heroName='{}'", heroName);
         long money = shopService.buyIncubator(heroName);
         return new MoneyResponse(money);
     }

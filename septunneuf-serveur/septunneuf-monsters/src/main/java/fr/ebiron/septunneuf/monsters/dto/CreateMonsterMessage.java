@@ -1,8 +1,6 @@
 package fr.ebiron.septunneuf.monsters.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import java.io.Serializable;
 
 public class CreateMonsterMessage implements Serializable {

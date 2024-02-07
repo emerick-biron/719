@@ -4,8 +4,8 @@ public class MonsterToInventoryMessage {
     private long monsterId;
     private String heroName;
 
-    public MonsterToInventoryMessage(long eggId, String heroName) {
-        this.monsterId = eggId;
+    public MonsterToInventoryMessage(long monsterId, String heroName) {
+        this.monsterId = monsterId;
         this.heroName = heroName;
     }
 

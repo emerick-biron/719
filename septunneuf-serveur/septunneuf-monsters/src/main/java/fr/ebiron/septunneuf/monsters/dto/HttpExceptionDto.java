@@ -22,6 +22,9 @@ public class HttpExceptionDto {
         this.details = details;
     }
 
+    public HttpExceptionDto() {
+    }
+
     public int getStatusCode() {
         return statusCode;
     }

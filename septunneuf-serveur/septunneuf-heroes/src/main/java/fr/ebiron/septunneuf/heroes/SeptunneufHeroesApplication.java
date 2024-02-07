@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class SeptunneufHeroesApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(SeptunneufHeroesApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SeptunneufHeroesApplication.class, args);
+    }
 }

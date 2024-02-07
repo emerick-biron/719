@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class SeptunneufStorageApplication
 
 fun main(args: Array<String>) {
-	runApplication<SeptunneufStorageApplication>(*args)
+    runApplication<SeptunneufStorageApplication>(*args)
 }

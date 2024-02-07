@@ -7,6 +7,9 @@ public class ReleaseMonsterResponse {
         this.id = id;
     }
 
+    public ReleaseMonsterResponse() {
+    }
+
     public long getId() {
         return id;
     }

@@ -2,8 +2,6 @@ package fr.ebiron.septunneuf.monsters.utils;
 
 import java.util.Random;
 
-import java.util.Random;
-
 public class RandomGenerators {
     public static String randomHexColor() {
         // Générer un code hexadécimal aléatoire de 6 caractères (ex: "1a2b3c")

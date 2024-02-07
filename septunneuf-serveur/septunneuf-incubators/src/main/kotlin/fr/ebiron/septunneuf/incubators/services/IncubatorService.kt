@@ -6,6 +6,7 @@ import fr.ebiron.septunneuf.incubators.exceptions.TooManyIncubatorException
 import fr.ebiron.septunneuf.incubators.models.Incubator
 import fr.ebiron.septunneuf.incubators.publishers.IncubatorPublisher
 import fr.ebiron.septunneuf.incubators.repositories.IncubatorRepository
+import org.slf4j.LoggerFactory
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -19,14 +20,19 @@ class IncubatorService(
     private val sequenceGeneratorService: SequenceGeneratorService,
     private val incubatorPublisher: IncubatorPublisher
 ) {
+
+    private val log = LoggerFactory.getLogger(javaClass)
+
     fun createIncubator(heroName: String): Incubator {
         val ownedIncubators: List<Incubator> = getHeroIncubators(heroName)
         if (ownedIncubators.size >= 6) {
+            log.error("Hero $heroName has already 6 incubators")
             throw TooManyIncubatorException("Hero $heroName has already 6 incubators")
         }
         val id = sequenceGeneratorService.generateSequence(Incubator.SEQUENCE_NAME)
         val incubator = Incubator(id, heroName)
         db.save(incubator)
+        log.info("Incubator created: $incubator")
         return incubator
     }
 
@@ -44,20 +50,23 @@ class IncubatorService(
         incubator.hatchingDateTime = LocalDateTime.now().plus(incubationTime.toJavaDuration())
         try {
             db.save(incubator)
+            log.info("Egg put in incubator: $incubator")
         } catch (e: DuplicateKeyException) {
+            log.error("Egg $eggId is already in an incubator")
             throw EggAlreadyInIncubatorException("Egg $eggId is already in an incubator")
         }
     }
 
     @Scheduled(fixedRate = 5000)
     fun checkEggHatching() {
+        log.info("Checking EggHatching")
         val now = LocalDateTime.now()
         val incubatorsWithEggHatched = db.findByHatchingDateTimeBefore(now)
-
+        log.info("Hatched eggs: ${incubatorsWithEggHatched.map { it.eggId }}")
         incubatorsWithEggHatched.forEach {
             incubatorPublisher.sendCreateMonsterMessage(it.heroName)
         }
-        val eggsToRemove = incubatorsWithEggHatched.mapNotNull { it.eggId }.toList()
+        val eggsToRemove = incubatorsWithEggHatched.mapNotNull { it.eggId }
         if (eggsToRemove.isNotEmpty()) {
             incubatorPublisher.sendRemoveEggsMessage(eggsToRemove)
         }
@@ -70,6 +79,8 @@ class IncubatorService(
         }.partition { it.durability > 0 }
 
         db.saveAll(toSave)
+        log.info("Incubators updated: $toSave")
         db.deleteAll(toDelete)
+        log.info("Incubators deleted: $toDelete")
     }
 }

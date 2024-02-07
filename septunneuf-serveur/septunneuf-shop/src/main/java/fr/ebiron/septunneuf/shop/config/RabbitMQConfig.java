@@ -1,7 +1,6 @@
 package fr.ebiron.septunneuf.shop.config;
 
 
-
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,27 +12,27 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     @Bean
-    public Queue removeEggs(){
+    public Queue removeEggs() {
         return new Queue("removeEggs.queue");
     }
 
     @Bean
-    public Queue addEggToInventory(){
+    public Queue addEggToInventory() {
         return new Queue("addEggToInventory.queue");
     }
 
     @Bean
-    public Queue removeEggToInventory(){
+    public Queue removeEggToInventory() {
         return new Queue("removeEggToInventory.queue");
     }
 
     @Bean
-    public Queue removeMonsterToInventory(){
+    public Queue removeMonsterToInventory() {
         return new Queue("removeMonsterToInventory.queue");
     }
 
     @Bean
-    public Queue createIncubator(){
+    public Queue createIncubator() {
         return new Queue("createIncubator.queue");
     }
 

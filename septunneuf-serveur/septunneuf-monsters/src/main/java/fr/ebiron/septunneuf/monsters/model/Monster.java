@@ -6,20 +6,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Random;
 
-import static org.springframework.amqp.core.QueueBuilder.LeaderLocator.random;
-
 @Document("monster")
 public class Monster {
+    @Transient
+    public static final String SEQUENCE_NAME = "monsters_sequence";
     @Id
     private long id;
     private String name;
-
     private String color;
     private long attack;
     private long level;
-
-    @Transient
-    public static final String SEQUENCE_NAME = "monsters_sequence";
 
     public Monster(long id, String nom, String color) {
         this.id = id;
@@ -27,7 +23,7 @@ public class Monster {
         this.color = color;
 
         Random rand = new Random();
-        this.attack = rand.nextInt(5)+1;
+        this.attack = rand.nextInt(5) + 1;
         this.level = 1;
     }
 
@@ -72,5 +68,16 @@ public class Monster {
 
     public void setLevel(long level) {
         this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "Monster{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                ", attack=" + attack +
+                ", level=" + level +
+                '}';
     }
 }

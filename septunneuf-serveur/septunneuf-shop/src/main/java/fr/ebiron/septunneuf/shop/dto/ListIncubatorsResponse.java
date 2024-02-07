@@ -6,11 +6,11 @@ import java.util.List;
 public class ListIncubatorsResponse {
     private List<Long> incubatorIds;
 
-    public List<Long> getIncubatorIds() {
-        return incubatorIds;
+    public ListIncubatorsResponse() {
     }
 
-    public ListIncubatorsResponse() {
+    public List<Long> getIncubatorIds() {
+        return incubatorIds;
     }
 
     public void setIncubatorIds(List<Long> incubatorIds) {

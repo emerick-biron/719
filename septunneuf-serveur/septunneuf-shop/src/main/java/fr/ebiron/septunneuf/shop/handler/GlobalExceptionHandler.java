@@ -3,6 +3,8 @@ package fr.ebiron.septunneuf.shop.handler;
 
 import fr.ebiron.septunneuf.shop.dto.HttpExceptionDto;
 import fr.ebiron.septunneuf.shop.exception.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,10 +13,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public HttpExceptionDto handleNotFoundException(NotFoundException e) {
+        log.error("NotFoundException: ${}", e.getMessage());
         return new HttpExceptionDto(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMessage());
     }
 
@@ -22,6 +28,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     public HttpExceptionDto handleConflictException(ConflictException e) {
+        log.error("ConflictException: ${}", e.getMessage());
         return new HttpExceptionDto(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage());
     }
 
@@ -29,6 +36,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     public HttpExceptionDto handleNotEnoughtMoneyException(NotEnoughtMoney e) {
+        log.error("NotEnoughtMoney: ${}", e.getMessage());
         return new HttpExceptionDto(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase(), e.getMessage());
     }
 
@@ -36,6 +44,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public HttpExceptionDto handleEggNotOwnedException(NotOwned e) {
+        log.error("NotOwned: ${}", e.getMessage());
         return new HttpExceptionDto(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage());
     }
 
@@ -43,6 +52,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public HttpExceptionDto handleTooManyIncubatorException(TooManyIncubator e) {
+        log.error("TooManyIncubator: ${}", e.getMessage());
         return new HttpExceptionDto(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage());
     }
 }

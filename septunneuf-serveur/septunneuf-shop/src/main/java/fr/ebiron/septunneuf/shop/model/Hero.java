@@ -1,6 +1,5 @@
 package fr.ebiron.septunneuf.shop.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
@@ -29,5 +28,13 @@ public class Hero {
 
     public void setMoney(long money) {
         this.money = money;
+    }
+
+    @Override
+    public String toString() {
+        return "Hero{" +
+                "name='" + name + '\'' +
+                ", money=" + money +
+                '}';
     }
 }

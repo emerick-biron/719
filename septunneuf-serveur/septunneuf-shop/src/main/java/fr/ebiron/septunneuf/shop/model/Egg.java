@@ -31,4 +31,12 @@ public class Egg implements Serializable {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Egg{" +
+                "id=" + id +
+                ", price=" + price +
+                '}';
+    }
 }

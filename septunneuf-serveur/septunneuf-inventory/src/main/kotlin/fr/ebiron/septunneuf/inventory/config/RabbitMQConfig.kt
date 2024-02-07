@@ -32,12 +32,12 @@ class RabbitMQConfig {
     }
 
     @Bean
-    fun deleteMonsterQueue():Queue{
+    fun deleteMonsterQueue(): Queue {
         return Queue("deleteMonster.queue")
     }
 
     @Bean
-    fun removeEggsQueue():Queue{
+    fun removeEggsQueue(): Queue {
         return Queue("removeEggs.queue")
     }
 

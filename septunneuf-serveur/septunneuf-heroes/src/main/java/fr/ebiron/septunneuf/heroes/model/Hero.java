@@ -1,7 +1,6 @@
 package fr.ebiron.septunneuf.heroes.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("hero")
@@ -16,6 +15,14 @@ public class Hero {
     public Hero(String nom, String color) {
         this.name = nom;
         this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        return "Hero{" +
+                "name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                '}';
     }
 
     public String getName() {

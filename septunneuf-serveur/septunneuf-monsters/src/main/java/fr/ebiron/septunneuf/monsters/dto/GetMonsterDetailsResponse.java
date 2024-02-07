@@ -17,6 +17,9 @@ public class GetMonsterDetailsResponse {
         this.level = monster.getLevel();
     }
 
+    public GetMonsterDetailsResponse() {
+    }
+
     public long getId() {
         return id;
     }

@@ -8,6 +8,9 @@ public class CreateWalletRequest {
         this.name = name;
     }
 
+    public CreateWalletRequest() {
+    }
+
     public String getName() {
         return name;
     }
