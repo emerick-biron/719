@@ -9,18 +9,13 @@ const HeroLogin = () => {
 	
   	const login = async (formData: any) => {
 		try {
-			const response = await fetch(`${process.env.REACT_APP_API_URL}/heroes/${formData.name}/details`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
+			const response = await fetch(`${process.env.REACT_APP_API_URL}/heroes/${formData.name}/details`);
 
 			if (response.ok) {
 				const responseData = await response.json();
-				const { id, name, color } = responseData[0];
-				setUser({ id, name, color });
-				localStorage.setItem('hero', JSON.stringify({ id, name, color }));
+				const { name, color, money } = responseData[0];
+				setUser({ name, color, money});
+				localStorage.setItem('hero', JSON.stringify({ name, color }));
 				navigate('/inventory');
 			} else {
 				console.log('Erreur lors de la connexion');

@@ -8,7 +8,6 @@ const HeroCreate = () => {
     const navigate = useNavigate(); 
 
     const createHero = async (formData: any) => {
-        console.log('formData', formData);
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/heroes/create`, {
             method: 'POST',
@@ -20,9 +19,9 @@ const HeroCreate = () => {
 
             if (response.ok) {
 				const responseData = await response.json();
-				const { id, name, color } = responseData[0];
-				setUser({ id, name, color });
-				localStorage.setItem('hero', JSON.stringify({ id, name, color }));
+				const { name, color } = responseData[0];
+				setUser({ name, color, money: 10});
+				localStorage.setItem('hero', JSON.stringify({ name, color }));
                 navigate('/inventory');
 			} else {
 				console.log('Erreur lors de la connexion');

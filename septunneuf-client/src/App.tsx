@@ -8,6 +8,7 @@ import HeroLogin from "./components/Hero/HeroLogin";
 import { useEffect } from "react";
 import { RecoilRoot, useRecoilState } from "recoil";
 import HeroCreate from "./components/Hero/HeroCreate";
+import BagView from "./components/Bag/BagView";
 
 function App() {
 	const [hero, setHero] = useRecoilState(heroState);
@@ -43,8 +44,9 @@ function App() {
 				<Route path="/inventory" element={<InventoryView />} />
 				<Route path="/shop-sell" element={<ShopSellView />} />
 				<Route path="/shop-buy" element={<ShopBuyView />} />
+				<Route path="/bag" element={<BagView />} />
 			</Routes>
-			<footer className="h-96"></footer>
+			<footer className="h-screen"></footer>
 		</BrowserRouter>
 
 	);

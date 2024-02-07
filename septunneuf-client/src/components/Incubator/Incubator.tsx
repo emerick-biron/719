@@ -54,12 +54,12 @@ const Incubator = () => {
         <>
             <div className="bg-gray-100 p-4 my-4 rounded-md shadow-sm inline-block">
             <h1 className="font-bold text-2xl my-2">Incubateurs possédés: {incubators.length}/6</h1>
-                    <CustomButton 
-                        onClick={handleBuyIncubator} 
-                        text="Ajouter un incubateur" 
-                        disabled={incubators.length < 6 ? false: true} 
-                        color="green"
-                    />
+                <CustomButton 
+                    onClick={handleBuyIncubator} 
+                    text="Acheter un incubateur" 
+                    disabled={incubators.length < 6 ? false: true} 
+                    color="green"
+                />
             </div>
             <CustomAlert 
                 severty="error"

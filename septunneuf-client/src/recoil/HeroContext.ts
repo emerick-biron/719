@@ -2,9 +2,9 @@
 import { atom } from 'recoil';
 
 export type HeroType = {
-	id: number;
 	name: string;
 	color: string;
+	money: number;
 };
 
 export const heroState = atom<HeroType | null>({

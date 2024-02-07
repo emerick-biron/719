@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Egg from "./Egg";
 import CustomAlert from "../Common/CustomAlert";
 import CustomButton from "../Common/CustomButton";
+import { useRecoilValue } from "recoil";
+import { heroState } from "../../recoil/HeroContext";
 
 interface EggsShopProps {
     CustomButtonLabel?: string;
@@ -13,6 +15,7 @@ const EggsShop = (props: EggsShopProps) => {
     const [eggs, setEggs] = useState([]);
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertSeverity, setAlertSeverity] = useState("success"); 
+    const hero = useRecoilValue(heroState);
 
     useEffect(() => {
         const fetchEggItemsShop = async () => {
@@ -47,7 +50,10 @@ const EggsShop = (props: EggsShopProps) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({id: 1})
+                body: JSON.stringify({
+                    heroName: hero?.name,
+                    money: hero?.money
+                })
             });
             if (!response.ok) {
                 setAlertSeverity("error");
