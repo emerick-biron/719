@@ -30,6 +30,10 @@ public class HeroService {
     }
 
     public Hero createHero(String nom, String color) throws ConflictException, WalletCreationException {
+        if (bd.existsById(nom)) {
+            throw new ConflictException("Hero " + nom + " already exist");
+        }
+
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("heroName", nom);
@@ -42,9 +46,7 @@ public class HeroService {
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new WalletCreationException("Cannot create wallet for " + nom);
         }
-        if (bd.existsById(nom)) {
-            throw new ConflictException("Hero " + nom + " already exist");
-        }
+
         Hero hero = new Hero(nom, color);
         bd.save(hero);
         log.info("Hero created: {}", hero);

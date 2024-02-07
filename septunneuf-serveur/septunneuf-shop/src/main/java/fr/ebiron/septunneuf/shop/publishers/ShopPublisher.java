@@ -38,7 +38,7 @@ public class ShopPublisher {
     }
 
     public void sendRemoveMonsterToInventoryMessage(long monsterId, String heroName) {
-        log.info("Send removeEggToInventory.queue - heroName='{}', monsterId={}", heroName, monsterId);
+        log.info("Send removeMonsterToInventory.queue - heroName='{}', monsterId={}", heroName, monsterId);
         rabbitTemplate.convertAndSend("removeMonsterToInventory.queue", new MonsterToInventoryMessage(monsterId, heroName));
     }
 

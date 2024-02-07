@@ -35,7 +35,7 @@ public class MonsterConsumer {
 
     @RabbitListener(queues = "deleteMonster.queue")
     public void releaseMonster(DeleteMonsterMessage message) throws NotFoundException {
-        log.info("Received createMonster.queue - monsterId={}", message.getMonsterId());
+        log.info("Received deleteMonster.queue - monsterId={}", message.getMonsterId());
         monsterService.releaseMonster(message.getMonsterId());
     }
 

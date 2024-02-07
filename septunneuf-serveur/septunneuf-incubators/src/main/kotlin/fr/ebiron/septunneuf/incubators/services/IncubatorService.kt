@@ -78,9 +78,13 @@ class IncubatorService(
             }
         }.partition { it.durability > 0 }
 
-        db.saveAll(toSave)
-        log.info("Incubators updated: $toSave")
-        db.deleteAll(toDelete)
-        log.info("Incubators deleted: $toDelete")
+        if (toSave.isNotEmpty()) {
+            db.saveAll(toSave)
+            log.info("Incubators updated: $toSave")
+        }
+        if (toDelete.isNotEmpty()) {
+            db.deleteAll(toDelete)
+            log.info("Incubators deleted: $toDelete")
+        }
     }
 }

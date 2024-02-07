@@ -13,7 +13,7 @@ class EggConsumer(private val eggService: EggService) {
 
     @RabbitListener(queues = ["removeEggs.queue"])
     fun handleRemoveEggs(message: RemoveEggsMessage) {
-        log.info("Received createIncubator.queue - eggIds=${message.eggIds}")
+        log.info("Received removeEggs.queue - eggIds=${message.eggIds}")
         eggService.deleteEggsById(message.eggIds)
     }
 }

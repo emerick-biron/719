@@ -28,3 +28,15 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+
+tasks.named("bootJar") {
+    archiveClassifier = "boot"
+    archiveBaseName = "septunneuf-monsters"
+    archiveVersion = ""
+}
+
+tasks.named("jar") {
+    archiveBaseName = "septunneuf-monsters"
+    archiveVersion = ""
+}

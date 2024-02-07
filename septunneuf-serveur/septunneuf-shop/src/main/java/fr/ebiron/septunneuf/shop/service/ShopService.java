@@ -61,7 +61,10 @@ public class ShopService {
             throw new NotFoundException("Pas d'oeufs généré");
         }
         log.info("Eggs generated: {}", response.getEggIds());
-        shopPublisher.sendRemoveEggsMessage(this.getEggs().stream().map(Egg::getId).toList());
+        List<Long> eggIdsToRemove = this.getEggs().stream().map(Egg::getId).toList();
+        if (!eggIdsToRemove.isEmpty()) {
+            shopPublisher.sendRemoveEggsMessage(eggIdsToRemove);
+        }
         eggBD.deleteAll();
         log.info("All eggs deleted from shop");
         List<Egg> toSave = response.getEggIds().stream()

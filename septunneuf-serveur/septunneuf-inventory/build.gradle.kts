@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     id("org.springframework.boot") version "3.2.2"
@@ -40,4 +41,15 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.named<BootJar>("bootJar") {
+    archiveClassifier= "boot"
+    archiveBaseName = "septunneuf-inventory"
+    archiveVersion = ""
+}
+
+tasks.named<Jar>("jar") {
+    archiveBaseName = "septunneuf-inventory"
+    archiveVersion = ""
 }
