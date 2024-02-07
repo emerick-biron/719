@@ -22,7 +22,6 @@ public class MonsterController {
     }
 
     @GetMapping("/{monsterId}/details")
-    @ResponseBody
     public GetMonsterDetailsResponse getMonsterDetails(@PathVariable long monsterId) throws NotFoundException {
         log.info("GET /monsters/{}/details", monsterId);
         Monster monster = monsterService.getMonster(monsterId);

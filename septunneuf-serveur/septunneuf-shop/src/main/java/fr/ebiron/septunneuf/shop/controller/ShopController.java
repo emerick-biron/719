@@ -1,7 +1,7 @@
 package fr.ebiron.septunneuf.shop.controller;
 
 import fr.ebiron.septunneuf.shop.dto.MoneyResponse;
-import fr.ebiron.septunneuf.shop.dto.getEggsResponse;
+import fr.ebiron.septunneuf.shop.dto.GetEggsResponse;
 import fr.ebiron.septunneuf.shop.exception.*;
 import fr.ebiron.septunneuf.shop.service.ShopService;
 import jakarta.validation.Valid;
@@ -29,10 +29,9 @@ public class ShopController {
     }
 
     @GetMapping("/eggs")
-    @ResponseBody
-    public getEggsResponse GetEggs() {
+    public GetEggsResponse getEggs() {
         log.info("GET /shop/eggs");
-        return new getEggsResponse(shopService.getEggs());
+        return new GetEggsResponse(shopService.getEggs());
     }
 
     @PostMapping("/wallet/create")
@@ -45,7 +44,6 @@ public class ShopController {
     }
 
     @PostMapping("/eggs/{eggId}/purchase")
-    @ResponseBody
     public MoneyResponse eggPurchase(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName,
             @PathVariable long eggId
@@ -56,7 +54,6 @@ public class ShopController {
     }
 
     @PostMapping("/eggs/{eggId}/sell")
-    @ResponseBody
     public MoneyResponse eggSell(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName,
             @PathVariable long eggId
@@ -67,7 +64,6 @@ public class ShopController {
     }
 
     @PostMapping("/monsters/{monsterId}/sell")
-    @ResponseBody
     public MoneyResponse monsterSell(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName,
             @PathVariable long monsterId
@@ -78,7 +74,6 @@ public class ShopController {
     }
 
     @PostMapping("/incubator")
-    @ResponseBody
     public MoneyResponse shopIncubator(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName
     ) throws NotFoundException, TooManyIncubator, NotEnoughtMoney {

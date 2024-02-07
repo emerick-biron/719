@@ -4,10 +4,10 @@ import fr.ebiron.septunneuf.shop.model.Egg;
 
 import java.util.List;
 
-public class getEggsResponse {
+public class GetEggsResponse {
     private List<Egg> eggs;
 
-    public getEggsResponse(List<Egg> eggs) {
+    public GetEggsResponse(List<Egg> eggs) {
         this.eggs = eggs;
     }
 

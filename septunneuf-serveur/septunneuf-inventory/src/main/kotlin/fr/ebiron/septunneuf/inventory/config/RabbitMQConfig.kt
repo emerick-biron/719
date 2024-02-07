@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 
+private const val ADD_MONSTER_TO_INVENTORY_QUEUE_WAIT = "addMonsterToInventory.queue.wait"
+
+private const val ADD_MONSTER_TO_INVENTORY_EXCHANGE = "addMonsterToInventory.exchange"
+
 @Configuration
 class RabbitMQConfig {
     @Bean
@@ -45,21 +49,21 @@ class RabbitMQConfig {
     @Bean
     fun addMonsterToInventoryQueue(): Queue {
         return QueueBuilder.durable("addMonsterToInventory.queue")
-            .deadLetterExchange("addMonsterToInventory.exchange")
-            .deadLetterRoutingKey("addMonsterToInventory.queue.wait")
+            .deadLetterExchange(ADD_MONSTER_TO_INVENTORY_EXCHANGE)
+            .deadLetterRoutingKey(ADD_MONSTER_TO_INVENTORY_QUEUE_WAIT)
             .build()
     }
 
     @Bean
     fun addMonsterToInventoryExchange(): DirectExchange {
-        return DirectExchange("addMonsterToInventory.exchange")
+        return DirectExchange(ADD_MONSTER_TO_INVENTORY_EXCHANGE)
     }
 
 
     @Bean
     fun addMonsterToInventoryWaitQueue(): Queue {
-        return QueueBuilder.durable("addMonsterToInventory.queue.wait")
-            .deadLetterExchange("addMonsterToInventory.exchange")
+        return QueueBuilder.durable(ADD_MONSTER_TO_INVENTORY_QUEUE_WAIT)
+            .deadLetterExchange(ADD_MONSTER_TO_INVENTORY_EXCHANGE)
             .deadLetterRoutingKey("addMonsterToInventory.routingKey")
             .ttl(10000)
             .build()
@@ -80,7 +84,7 @@ class RabbitMQConfig {
         addMonsterToInventoryExchange: DirectExchange
     ): Binding {
         return BindingBuilder.bind(addMonsterToInventoryWaitQueue).to(addMonsterToInventoryExchange)
-            .with("addMonsterToInventory.queue.wait")
+            .with(ADD_MONSTER_TO_INVENTORY_QUEUE_WAIT)
     }
 
     @Bean

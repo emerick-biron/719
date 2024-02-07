@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/heroes")
 public class HeroController {
@@ -29,7 +28,6 @@ public class HeroController {
     }
 
     @PostMapping("/create")
-    @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public CreateHeroResponse createHero(@Valid @RequestBody CreateHeroRequest req) throws ConflictException, WalletCreationException {
         log.info("POST /heroes/create - name='{}', color='{}'", req.getName(), req.getColor());
@@ -38,8 +36,7 @@ public class HeroController {
     }
 
     @GetMapping("/{heroName}/details")
-    @ResponseBody
-    public GetHeroDetailsResponse GetHeroDetails(@PathVariable String heroName) throws NotFoundException {
+    public GetHeroDetailsResponse getHeroDetails(@PathVariable String heroName) throws NotFoundException {
         log.info("GET /heroes/{}/details", heroName);
         Hero hero = heroService.getHero(heroName);
         return new GetHeroDetailsResponse(hero.getName(), hero.getColor());

@@ -2,7 +2,7 @@ package fr.ebiron.septunneuf.heroes.dto;
 
 public class CreateWalletRequest {
 
-    public String name;
+    private String name;
 
     public CreateWalletRequest(String name) {
         this.name = name;

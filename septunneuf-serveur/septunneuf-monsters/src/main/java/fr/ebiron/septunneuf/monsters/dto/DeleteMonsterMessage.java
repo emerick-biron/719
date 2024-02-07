@@ -2,7 +2,7 @@ package fr.ebiron.septunneuf.monsters.dto;
 
 import java.io.Serializable;
 
-public class DeleteMonsterMessage implements Serializable {
+public class DeleteMonsterMessage {
     private Long monsterId;
 
     public DeleteMonsterMessage() {

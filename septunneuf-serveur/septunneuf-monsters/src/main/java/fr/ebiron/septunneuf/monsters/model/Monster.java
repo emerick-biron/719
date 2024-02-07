@@ -23,7 +23,7 @@ public class Monster {
         this.color = color;
 
         Random rand = new Random();
-        this.attack = rand.nextInt(5) + 1;
+        this.attack = rand.nextLong(5) + 1;
         this.level = 1;
     }
 
