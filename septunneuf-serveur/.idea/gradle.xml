@@ -31,15 +31,6 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/septunneuf-shop" />
-        <option name="gradleJvm" value="openjdk-21" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/septunneuf-shop" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/septunneuf-inventory" />
         <option name="gradleJvm" value="openjdk-21" />
         <option name="modules">
@@ -54,6 +45,24 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/septunneuf-monsters" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/septunneuf-shop" />
+        <option name="gradleJvm" value="openjdk-21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/septunneuf-shop" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/septunneuf-storage" />
+        <option name="gradleJvm" value="openjdk-21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/septunneuf-storage" />
           </set>
         </option>
       </GradleProjectSettings>
