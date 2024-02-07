@@ -1,12 +1,12 @@
 package fr.ebiron.septunneuf.inventory.services
 
-import fr.ebiron.septunneuf.inventory.exceptions.EggInventoryNotFound
+import fr.ebiron.septunneuf.inventory.exceptions.InventoryFullException
 import fr.ebiron.septunneuf.inventory.exceptions.MonsterInventoryNotFound
-import fr.ebiron.septunneuf.inventory.models.EggInventory
 import fr.ebiron.septunneuf.inventory.models.MonsterInventory
 import fr.ebiron.septunneuf.inventory.publisher.MonsterInventoryPublisher
 import fr.ebiron.septunneuf.inventory.repositories.MonsterInventoryRepository
 import org.springframework.stereotype.Service
+import kotlin.jvm.optionals.getOrElse
 
 @Service
 class MonsterInventoryService(
@@ -24,10 +24,26 @@ class MonsterInventoryService(
 
     fun storeMonster(heroName: String, monsterId: Long) {
         removeMonsterToInventory(heroName, monsterId)
-        monsterInventoryPublisher.sendStoreMonster(heroName, monsterId)
+        monsterInventoryPublisher.sendStoreMonsterMessage(heroName, monsterId)
     }
 
-    fun addMonsterToInventory(heroName: String, monsterId: Long) {
-        println("Monster $monsterId added to $heroName")
+    fun releaseMonster(heroName: String, monsterId: Long) {
+        removeMonsterToInventory(heroName, monsterId)
+        monsterInventoryPublisher.sendDeleteMonsterMessage(heroName, monsterId)
     }
+
+    fun addMonsterToInventory(heroName: String, monsterId: Long): MonsterInventory {
+        val monsterInventory = db.findById(heroName).getOrElse { MonsterInventory(heroName) }
+        if (monsterInventory.monsterIds.size >= 6) {
+            throw InventoryFullException("Cannot add monter with id $monsterId to $heroName inventory. Inventory is full")
+        }
+        monsterInventory.monsterIds.add(monsterId)
+        db.save(monsterInventory)
+        return monsterInventory
+    }
+
+    fun getMonsterInventory(heroName: String): MonsterInventory {
+       return db.findById(heroName).getOrElse { MonsterInventory(heroName) }
+    }
+
 }

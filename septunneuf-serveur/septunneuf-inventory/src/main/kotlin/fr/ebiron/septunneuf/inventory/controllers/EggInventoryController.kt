@@ -16,7 +16,7 @@ class EggInventoryController(private val service: EggInventoryService) {
         @NotBlank
         heroName: String
     ): EggIdsResponse {
-        val eggInventory = service.getEggsInInventory(heroName)
+        val eggInventory = service.getEggInventory(heroName)
         return EggIdsResponse(eggInventory.eggIds.toList())
     }
 }

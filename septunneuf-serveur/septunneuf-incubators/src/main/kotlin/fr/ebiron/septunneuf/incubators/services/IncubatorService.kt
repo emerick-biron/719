@@ -35,7 +35,7 @@ class IncubatorService(
     }
 
     fun getIncubatorById(incubatorId: Long): Incubator {
-        return db.findById(incubatorId).orElseThrow { NotFoundException("Incubator not found for if $incubatorId") }
+        return db.findById(incubatorId).orElseThrow { NotFoundException("Incubator not found for id $incubatorId") }
     }
 
     fun fillIncubator(incubatorId: Long, eggId: Long, incubationTime: Duration) {
