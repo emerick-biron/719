@@ -221,6 +221,17 @@ services:
     networks:
       - kong-net
 
+  kong-setup:
+    restart: on-failure
+    build:
+      context: ./kong-setup
+    environment:
+      KONG_ADMIN_URL: "http://kong:8001"
+    depends_on:
+      - kong
+    networks:
+      - kong-net
+
 networks:
   kong-net:
   eggs-net:

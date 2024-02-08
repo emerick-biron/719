@@ -148,15 +148,6 @@ services:
     networks:
       - storage-net
 
-  # To view logs
-  dozzle:
-    container_name: dozzle
-    image: amir20/dozzle:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - "8080:8080"
-
   kong-db:
     image: 'postgres:9.6'
     environment:
@@ -202,14 +193,13 @@ services:
     networks:
       - kong-net
 
-  konga:
-    image: pantsel/konga
+  kong-setup:
+    restart: on-failure
+    build:
+      context: ./kong-setup
     environment:
-      - NODE_ENV=production
-    ports:
-      - '1337:1337'
+      KONG_ADMIN_URL: "http://kong:8001"
     depends_on:
-      - kong-db
       - kong
     networks:
       - kong-net
