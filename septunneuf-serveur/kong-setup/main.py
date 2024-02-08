@@ -1,4 +1,5 @@
 import os
+import sys
 
 import requests
 
@@ -155,3 +156,5 @@ for service, body in create_service_bodies.items():
 for service, body in create_route_bodies.items():
     resp = requests.post(f"{KONG_ADMIN_URL}/routes", json=body)
     print(f"Created route for {service}. Status code {resp.status_code}")
+
+sys.exit(0)

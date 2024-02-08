@@ -1,7 +1,5 @@
 package fr.ebiron.septunneuf.monsters.dto;
 
-import java.io.Serializable;
-
 public class DeleteMonsterMessage {
     private Long monsterId;
 

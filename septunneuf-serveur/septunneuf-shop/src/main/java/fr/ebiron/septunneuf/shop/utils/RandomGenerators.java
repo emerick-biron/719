@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class RandomGenerators {
     private static final Random RANDOM = new Random();
+
     public static int randomEggPrice() {
         return RANDOM.nextInt(5) + 1;
     }

@@ -31,6 +31,7 @@ dependencies {
     testImplementation("org.springframework.amqp:spring-rabbit-test")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 }
 
 tasks.withType<KotlinCompile> {
@@ -45,7 +46,7 @@ tasks.withType<Test> {
 }
 
 tasks.named<BootJar>("bootJar") {
-    archiveClassifier= "boot"
+    archiveClassifier = "boot"
     archiveBaseName = "septunneuf-eggs"
     archiveVersion = ""
 }

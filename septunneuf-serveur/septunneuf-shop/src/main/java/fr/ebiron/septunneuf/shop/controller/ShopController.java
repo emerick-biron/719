@@ -1,7 +1,7 @@
 package fr.ebiron.septunneuf.shop.controller;
 
-import fr.ebiron.septunneuf.shop.dto.MoneyResponse;
 import fr.ebiron.septunneuf.shop.dto.GetEggsResponse;
+import fr.ebiron.septunneuf.shop.dto.MoneyResponse;
 import fr.ebiron.septunneuf.shop.exception.*;
 import fr.ebiron.septunneuf.shop.service.ShopService;
 import jakarta.validation.Valid;

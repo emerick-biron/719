@@ -3,7 +3,8 @@ package fr.ebiron.septunneuf.monsters.utils;
 import java.util.Random;
 
 public class RandomGenerators {
-    private static final  Random RDM = new Random();
+    private static final Random RDM = new Random();
+
     public static String randomHexColor() {
         // Générer un code hexadécimal aléatoire de 6 caractères (ex: "1a2b3c")
         StringBuilder hexColor = new StringBuilder("#");
