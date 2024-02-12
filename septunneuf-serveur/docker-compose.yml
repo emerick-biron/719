@@ -175,7 +175,7 @@ services:
     restart: on-failure
     ports:
       #      - '8444:8444'
-#      - '8001:8001'
+      #      - '8001:8001'
       #      - '8443:8443'
       - '8000:8000'
     environment:

@@ -23,7 +23,7 @@ public class ShopController {
 
     @PostMapping("/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void shopUpdate() throws NotFoundException {
+    public void shopUpdate() throws EggsGenerationException {
         log.info("POST /shop/update");
         shopService.updateEggs();
     }
@@ -57,7 +57,7 @@ public class ShopController {
     public MoneyResponse eggSell(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName,
             @PathVariable long eggId
-    ) throws NotFoundException, NotOwned {
+    ) throws NotFoundException, NotOwned, GetHeroEggsException {
         log.info("POST /shop/eggs/{}/sell - heroName='{}'", eggId, heroName);
         long money = shopService.sellEgg(eggId, heroName);
         return new MoneyResponse(money);
@@ -67,7 +67,7 @@ public class ShopController {
     public MoneyResponse monsterSell(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName,
             @PathVariable long monsterId
-    ) throws NotFoundException, NotOwned {
+    ) throws NotFoundException, NotOwned, GetHeroMonstersException {
         log.info("POST /shop/monsters/{}/sell - heroName='{}'", monsterId, heroName);
         long money = shopService.sellMonster(monsterId, heroName);
         return new MoneyResponse(money);
@@ -76,7 +76,7 @@ public class ShopController {
     @PostMapping("/incubator")
     public MoneyResponse shopIncubator(
             @RequestHeader(required = true, name = "heroName") @Valid String heroName
-    ) throws NotFoundException, TooManyIncubator, NotEnoughtMoney {
+    ) throws NotFoundException, TooManyIncubator, NotEnoughtMoney, GetHeroIncubatorsException {
         log.info("POST /shop/incubator - heroName='{}'", heroName);
         long money = shopService.buyIncubator(heroName);
         return new MoneyResponse(money);

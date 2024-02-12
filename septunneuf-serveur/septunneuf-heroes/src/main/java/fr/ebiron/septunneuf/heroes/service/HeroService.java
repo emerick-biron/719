@@ -9,15 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 @Service
 public class HeroService {
     private final HeroRepository bd;
+    private final RestClient restClient;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -25,32 +25,37 @@ public class HeroService {
     private String serviceShopUrl;
 
     @Autowired
-    public HeroService(HeroRepository bd) {
+    public HeroService(HeroRepository bd, RestClient restClient) {
         this.bd = bd;
+        this.restClient = restClient;
     }
 
-    public Hero createHero(String nom, String color) throws ConflictException, WalletCreationException {
-        if (bd.existsById(nom)) {
-            throw new ConflictException("Hero " + nom + " already exist");
+    public Hero createHero(String heroName, String color) throws ConflictException, WalletCreationException {
+        if (bd.existsById(heroName)) {
+            throw new ConflictException("Hero " + heroName + " already exist");
         }
 
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("heroName", nom);
-        HttpEntity<Void> httpEntity = new HttpEntity<>(null, httpHeaders);
+        createHeroWallet(heroName);
 
-        log.info("Send create wallet request to {}{}", serviceShopUrl, "/shop/wallet/create");
-        ResponseEntity<Void> response = restTemplate.postForEntity(serviceShopUrl + "/shop/wallet/create", httpEntity, Void.class);
-        log.info("Create wallet response code: {}", response.getStatusCode());
-
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new WalletCreationException("Cannot create wallet for " + nom);
-        }
-
-        Hero hero = new Hero(nom, color);
+        Hero hero = new Hero(heroName, color);
         bd.save(hero);
         log.info("Hero created: {}", hero);
         return hero;
+    }
+
+    private void createHeroWallet(String heroName) throws WalletCreationException {
+        log.info("Send create wallet request to {}{}", serviceShopUrl, "/shop/wallet/create");
+        try {
+            ResponseEntity<Void> response = restClient.post()
+                    .uri(serviceShopUrl + "/wallet/create")
+                    .header("heroName", heroName)
+                    .retrieve()
+                    .toBodilessEntity();
+            log.info("Create wallet response code: {}", response.getStatusCode());
+        } catch (RestClientException e) {
+            log.error("Error while creating wallet", e);
+            throw new WalletCreationException("Cannot create wallet for " + heroName);
+        }
     }
 
     public Hero getHero(String name) throws NotFoundException {

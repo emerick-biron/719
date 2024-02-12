@@ -15,13 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +29,7 @@ public class ShopService {
     private final HeroRepository heroBD;
     private final EggRepository eggBD;
     private final ShopPublisher shopPublisher;
+    private final RestClient restClient;
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Value("${septunneuf.shop.eggs.url}")
     private String serviceEggsUrl;
@@ -40,10 +39,11 @@ public class ShopService {
     private String serviceIncubatorsUrl;
 
     @Autowired
-    public ShopService(HeroRepository heroBD, EggRepository eggBD, ShopPublisher shopPublisher) {
+    public ShopService(HeroRepository heroBD, EggRepository eggBD, ShopPublisher shopPublisher, RestClient restClient) {
         this.heroBD = heroBD;
         this.eggBD = eggBD;
         this.shopPublisher = shopPublisher;
+        this.restClient = restClient;
     }
 
     public List<Egg> getEggs() {
@@ -51,27 +51,41 @@ public class ShopService {
     }
 
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
-    public void updateEggs() throws NotFoundException {
+    public void updateEggs() throws EggsGenerationException {
         log.info("Updating Eggs");
-        RestTemplate restTemplate = new RestTemplate();
-        log.info("Send generateEggs request to {}{}", serviceEggsUrl, "/generate");
-        ListEggsResponse response = restTemplate.postForObject(serviceEggsUrl + "/generate", new GenerateEggsRequest(RandomGenerators.randomQuantity()), ListEggsResponse.class);
-        if (response == null || response.getEggIds() == null || response.getEggIds().isEmpty()) {
-            log.error("Bizarre, les oeufs ne sont pas arrivés");
-            throw new NotFoundException("Pas d'oeufs généré");
-        }
-        log.info("Eggs generated: {}", response.getEggIds());
+        List<Long> generatedEggIds = generateEggs();
         List<Long> eggIdsToRemove = this.getEggs().stream().map(Egg::getId).toList();
         if (!eggIdsToRemove.isEmpty()) {
             shopPublisher.sendRemoveEggsMessage(eggIdsToRemove);
         }
         eggBD.deleteAll();
         log.info("All eggs deleted from shop");
-        List<Egg> toSave = response.getEggIds().stream()
+        List<Egg> toSave = generatedEggIds.stream()
                 .map(eggId -> new Egg(eggId, RandomGenerators.randomEggPrice()))
                 .toList();
         eggBD.saveAll(toSave);
         log.info("Eggs added to shop: {}", toSave);
+    }
+
+    private List<Long> generateEggs() throws EggsGenerationException {
+        log.info("Send generateEggs request to {}{}", serviceEggsUrl, "/generate");
+        try {
+            ListEggsResponse response = restClient.post()
+                    .uri(serviceEggsUrl + "/generate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(new GenerateEggsRequest(RandomGenerators.randomQuantity()))
+                    .retrieve()
+                    .body(ListEggsResponse.class);
+            if (response == null || response.getEggIds() == null || response.getEggIds().isEmpty()) {
+                log.error("Error during egg generation");
+                throw new EggsGenerationException("Error during egg generation");
+            }
+            log.info("Eggs generated: {}", response.getEggIds());
+            return response.getEggIds();
+        } catch (RestClientException e) {
+            log.error("Error during egg generation", e);
+            throw new EggsGenerationException("Error during egg generation");
+        }
     }
 
     public void createHeroWallet(String heroName) throws ConflictException {
@@ -99,22 +113,11 @@ public class ShopService {
         return hero.getMoney();
     }
 
-    public long sellEgg(long eggId, String heroName) throws NotFoundException, NotOwned {
+    public long sellEgg(long eggId, String heroName) throws NotFoundException, NotOwned, GetHeroEggsException {
         Hero hero = heroBD.findById(heroName).orElseThrow(() -> new NotFoundException("Hero " + heroName + " dosn't exist"));
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("heroName", heroName);
-        HttpEntity<Void> httpEntity = new HttpEntity<>(null, httpHeaders);
-        log.info("Send get eggs request to {}{}", serviceInventoryUrl, "/eggs");
-        ResponseEntity<ListEggsResponse> response = restTemplate.exchange(serviceInventoryUrl + "/eggs", HttpMethod.GET, httpEntity, ListEggsResponse.class);
+        List<Long> heroEggIds = getHeroEggIds(heroName);
 
-        if (response.getBody() == null || response.getBody().getEggIds() == null) {
-            log.error("Error during request for eggs for {}", heroName);
-            throw new NotFoundException("Error during request for eggs for " + heroName);
-        }
-        log.info("Hero eggs in inventory: {}", response.getBody().getEggIds());
-
-        if (!response.getBody().getEggIds().contains(eggId)) {
+        if (!heroEggIds.contains(eggId)) {
             log.error("Hero {} don't have egg {}", heroName, eggId);
             throw new NotOwned("Hero " + heroName + " don't have egg #" + eggId);
         }
@@ -127,23 +130,32 @@ public class ShopService {
         return hero.getMoney();
     }
 
-
-    public long sellMonster(long monsterId, String heroName) throws NotFoundException, NotOwned {
-        Hero hero = heroBD.findById(heroName).orElseThrow(() -> new NotFoundException("Hero " + heroName + " dosn't exist"));
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("heroName", heroName);
-        HttpEntity<Void> httpEntity = new HttpEntity<>(null, httpHeaders);
-        log.info("Send get monsters request to {}{}", serviceInventoryUrl, "/monsters");
-        ResponseEntity<ListMonstersResponse> response = restTemplate.exchange(serviceInventoryUrl + "/monsters", HttpMethod.GET, httpEntity, ListMonstersResponse.class);
-
-        if (response.getBody() == null || response.getBody().getMonsterIds() == null) {
-            log.error("Error during request for monster for {}", heroName);
-            throw new NotFoundException("Error during request for monster for " + heroName);
+    private List<Long> getHeroEggIds(String heroName) throws GetHeroEggsException {
+        log.info("Send get eggs request to {}{}", serviceInventoryUrl, "/eggs");
+        try {
+            ListEggsResponse response = restClient.get()
+                    .uri(serviceInventoryUrl + "/eggs")
+                    .header("heroName", heroName)
+                    .retrieve()
+                    .body(ListEggsResponse.class);
+            if (response == null || response.getEggIds() == null) {
+                log.error("Error during request for eggs for {}", heroName);
+                throw new GetHeroEggsException("Error while retrieving eggs from the hero " + heroName);
+            }
+            log.info("Hero eggs in inventory: {}", response.getEggIds());
+            return response.getEggIds();
+        } catch (RestClientException e) {
+            log.error("Error while retrieving eggs from the hero " + heroName, e);
+            throw new GetHeroEggsException("Error while retrieving eggs from the hero " + heroName);
         }
-        log.info("Hero monsters in inventory: {}", response.getBody().getMonsterIds());
+    }
 
-        if (!response.getBody().getMonsterIds().contains(monsterId)) {
+
+    public long sellMonster(long monsterId, String heroName) throws NotFoundException, NotOwned, GetHeroMonstersException {
+        Hero hero = heroBD.findById(heroName).orElseThrow(() -> new NotFoundException("Hero " + heroName + " dosn't exist"));
+        List<Long> heroMonsterIds = getHeroMonsterIds(heroName);
+
+        if (!heroMonsterIds.contains(monsterId)) {
             log.error("Hero {} don't have monster {}", heroName, monsterId);
             throw new NotOwned("Hero " + heroName + " don't have monster #" + monsterId);
         }
@@ -156,27 +168,37 @@ public class ShopService {
         return hero.getMoney();
     }
 
-    public long buyIncubator(String heroName) throws NotFoundException, TooManyIncubator, NotEnoughtMoney {
+    private List<Long> getHeroMonsterIds(String heroName) throws GetHeroMonstersException {
+        log.info("Send get monsters request to {}{}", serviceInventoryUrl, "/monsters");
+        try {
+            ListMonstersResponse response = restClient.get()
+                    .uri(serviceInventoryUrl + "/monsters")
+                    .header("heroName", heroName)
+                    .retrieve()
+                    .body(ListMonstersResponse.class);
+
+            if (response == null || response.getMonsterIds() == null) {
+                log.error("Error during request for monster for {}", heroName);
+                throw new GetHeroMonstersException("Error while retrieving monsters from the hero " + heroName);
+            }
+            log.info("Hero monsters in inventory: {}", response.getMonsterIds());
+            return response.getMonsterIds();
+        } catch (RestClientException e) {
+            log.error("Error while retrieving monsters from the hero " + heroName, e);
+            throw new GetHeroMonstersException("Error while retrieving monsters from the hero " + heroName);
+        }
+    }
+
+    public long buyIncubator(String heroName) throws NotFoundException, TooManyIncubator, NotEnoughtMoney, GetHeroIncubatorsException {
         int incubatorPrice = 10;
         Hero hero = heroBD.findById(heroName).orElseThrow(() -> new NotFoundException("Hero " + heroName + " dosn't exist"));
         if (hero.getMoney() < incubatorPrice) {
             log.error("Hero {} don't have money to buy an incubator", heroName);
             throw new NotEnoughtMoney("Hero " + heroName + " don't have money to buy an incubator");
         }
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("heroName", heroName);
-        HttpEntity<Void> httpEntity = new HttpEntity<>(null, httpHeaders);
-        log.info("Send get incubators request to {}", serviceIncubatorsUrl);
-        ResponseEntity<ListIncubatorsResponse> response = restTemplate.exchange(serviceIncubatorsUrl, HttpMethod.GET, httpEntity, ListIncubatorsResponse.class);
+        List<Long> incubatorIds = getHeroIncubatorIds(heroName);
 
-        if (response.getBody() == null || response.getBody().getIncubatorIds() == null) {
-            log.error("Error during request for incubators for {}", heroName);
-            throw new NotFoundException("Error during request for incubators for " + heroName);
-        }
-        log.info("Hero incubators {}", response.getBody().getIncubatorIds());
-
-        if (response.getBody().getIncubatorIds().size() >= 6) {
+        if (incubatorIds.size() >= 6) {
             log.error("Hero {} have already 6 incubators", heroName);
             throw new TooManyIncubator("Hero " + heroName + " have already 6 incubators");
         }
@@ -187,5 +209,26 @@ public class ShopService {
         shopPublisher.sendCreateIncubatorMessage(heroName);
 
         return hero.getMoney();
+    }
+
+    private List<Long> getHeroIncubatorIds(String heroName) throws GetHeroIncubatorsException {
+        log.info("Send get incubators request to {}", serviceIncubatorsUrl);
+        try {
+            ListIncubatorsResponse response = restClient.get()
+                    .uri(serviceIncubatorsUrl)
+                    .header("heroName", heroName)
+                    .retrieve()
+                    .body(ListIncubatorsResponse.class);
+
+            if (response == null || response.getIncubatorIds() == null) {
+                log.error("Error while retrieving incubators from the hero " + heroName);
+                throw new GetHeroIncubatorsException("Error while retrieving incubators from the hero " + heroName);
+            }
+            log.info("Hero incubators {}", response.getIncubatorIds());
+            return response.getIncubatorIds();
+        } catch (RestClientException e) {
+            log.error("Error while retrieving incubators from the hero " + heroName, e);
+            throw new GetHeroIncubatorsException("Error while retrieving incubators from the hero " + heroName);
+        }
     }
 }
