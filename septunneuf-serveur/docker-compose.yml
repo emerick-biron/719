@@ -33,7 +33,7 @@ services:
     environment:
       MONGODB_HOST: "heroes-db"
       MONGODB_PORT: "27017"
-      SHOP_SERVICE_URL: "http://shop-app:8080"
+      SHOP_SERVICE_URL: "http://shop-app:8080/shop"
     depends_on:
       - heroes-db
     networks:
