@@ -15,7 +15,7 @@ services:
       MONGODB_PORT: "27017"
       RABBITMQ_HOST: "rabbitmq"
       RABBITMQ_PORT: "5672"
-      NODE_ENV: "DEVELOPMENT"
+      DISABLE_CORS: true
     depends_on:
       - rabbitmq
       - eggs-db
@@ -35,7 +35,7 @@ services:
       MONGODB_HOST: "heroes-db"
       MONGODB_PORT: "27017"
       SHOP_SERVICE_URL: "http://shop-app:8080/shop"
-      NODE_ENV: "DEVELOPMENT"
+      DISABLE_CORS: true
     depends_on:
       - heroes-db
     networks:
@@ -55,7 +55,7 @@ services:
       MONGODB_PORT: "27017"
       RABBITMQ_HOST: "rabbitmq"
       RABBITMQ_PORT: "5672"
-      NODE_ENV: "DEVELOPMENT"
+      DISABLE_CORS: true
     depends_on:
       - rabbitmq
       - incubators-db
@@ -76,7 +76,7 @@ services:
       REDIS_PORT: "6379"
       RABBITMQ_HOST: "rabbitmq"
       RABBITMQ_PORT: "5672"
-      NODE_ENV: "DEVELOPMENT"
+      DISABLE_CORS: true
     depends_on:
       - rabbitmq
       - inventory-db
@@ -97,7 +97,7 @@ services:
       MONGODB_PORT: "27017"
       RABBITMQ_HOST: "rabbitmq"
       RABBITMQ_PORT: "5672"
-      NODE_ENV: "DEVELOPMENT"
+      DISABLE_CORS: true
     depends_on:
       - rabbitmq
       - monsters-db
@@ -121,7 +121,7 @@ services:
       EGGS_SERVICE_URL: "http://eggs-app:8080/eggs"
       INVENTORY_SERVICE_URL: "http://inventory-app:8080/inventory"
       INCUBATORS_SERVICE_URL: "http://incubators-app:8080/incubators"
-      NODE_ENV: "DEVELOPMENT"
+      DISABLE_CORS: true
     depends_on:
       - rabbitmq
       - shop-db
@@ -142,7 +142,7 @@ services:
       REDIS_PORT: "6379"
       RABBITMQ_HOST: "rabbitmq"
       RABBITMQ_PORT: "5672"
-      NODE_ENV: "DEVELOPMENT"
+      DISABLE_CORS: true
     depends_on:
       - rabbitmq
       - storage-db
