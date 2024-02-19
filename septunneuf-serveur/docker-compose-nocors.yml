@@ -1,0 +1,222 @@
+version: "3.8"
+
+services:
+
+  rabbitmq:
+    image: 'rabbitmq'
+    networks:
+      - kong-net
+
+  eggs-app:
+    build:
+      context: ./septunneuf-eggs
+    environment:
+      MONGODB_HOST: "eggs-db"
+      MONGODB_PORT: "27017"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_PORT: "5672"
+      DISABLE_CORS: true
+    depends_on:
+      - rabbitmq
+      - eggs-db
+    networks:
+      - kong-net
+      - eggs-net
+
+  eggs-db:
+    image: mongo
+    networks:
+      - eggs-net
+
+  heroes-app:
+    build:
+      context: ./septunneuf-heroes
+    environment:
+      MONGODB_HOST: "heroes-db"
+      MONGODB_PORT: "27017"
+      SHOP_SERVICE_URL: "http://shop-app:8080/shop"
+      DISABLE_CORS: true
+    depends_on:
+      - heroes-db
+    networks:
+      - kong-net
+      - heroes-net
+
+  heroes-db:
+    image: mongo
+    networks:
+      - heroes-net
+
+  incubators-app:
+    build:
+      context: ./septunneuf-incubators
+    environment:
+      MONGODB_HOST: "incubators-db"
+      MONGODB_PORT: "27017"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_PORT: "5672"
+      DISABLE_CORS: true
+    depends_on:
+      - rabbitmq
+      - incubators-db
+    networks:
+      - kong-net
+      - incubators-net
+
+  incubators-db:
+    image: mongo
+    networks:
+      - incubators-net
+
+  inventory-app:
+    build:
+      context: ./septunneuf-inventory
+    environment:
+      REDIS_HOST: "inventory-db"
+      REDIS_PORT: "6379"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_PORT: "5672"
+      DISABLE_CORS: true
+    depends_on:
+      - rabbitmq
+      - inventory-db
+    networks:
+      - kong-net
+      - inventory-net
+
+  inventory-db:
+    image: redis
+    networks:
+      - inventory-net
+
+  monsters-app:
+    build:
+      context: ./septunneuf-monsters
+    environment:
+      MONGODB_HOST: "monsters-db"
+      MONGODB_PORT: "27017"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_PORT: "5672"
+      DISABLE_CORS: true
+    depends_on:
+      - rabbitmq
+      - monsters-db
+    networks:
+      - kong-net
+      - monsters-net
+
+  monsters-db:
+    image: mongo
+    networks:
+      - monsters-net
+
+  shop-app:
+    build:
+      context: ./septunneuf-shop
+    environment:
+      REDIS_HOST: "shop-db"
+      REDIS_PORT: "6379"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_PORT: "5672"
+      EGGS_SERVICE_URL: "http://eggs-app:8080/eggs"
+      INVENTORY_SERVICE_URL: "http://inventory-app:8080/inventory"
+      INCUBATORS_SERVICE_URL: "http://incubators-app:8080/incubators"
+      DISABLE_CORS: true
+    depends_on:
+      - rabbitmq
+      - shop-db
+    networks:
+      - kong-net
+      - shop-net
+
+  shop-db:
+    image: redis
+    networks:
+      - shop-net
+
+  storage-app:
+    build:
+      context: ./septunneuf-storage
+    environment:
+      REDIS_HOST: "storage-db"
+      REDIS_PORT: "6379"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_PORT: "5672"
+      DISABLE_CORS: true
+    depends_on:
+      - rabbitmq
+      - storage-db
+    networks:
+      - kong-net
+      - storage-net
+
+  storage-db:
+    image: redis
+    networks:
+      - storage-net
+
+  kong-db:
+    image: 'postgres:9.6'
+    environment:
+      - POSTGRES_DB=kong
+      - POSTGRES_USER=kong
+      - POSTGRES_PASSWORD=kong
+    networks:
+      - kong-net
+
+  kong-migrations:
+    command: 'kong migrations bootstrap'
+    image: 'kong:latest'
+    restart: on-failure
+    environment:
+      - KONG_PG_HOST=kong-db
+      - KONG_DATABASE=postgres
+      - KONG_PG_PASSWORD=kong
+    depends_on:
+      - kong-db
+    networks:
+      - kong-net
+
+  kong:
+    image: 'kong:latest'
+    restart: on-failure
+    ports:
+      #      - '8444:8444'
+      #      - '8001:8001'
+      #      - '8443:8443'
+      - '8000:8000'
+    environment:
+      - 'KONG_ADMIN_LISTEN=0.0.0.0:8001, 0.0.0.0:8444 ssl'
+      - KONG_ADMIN_ERROR_LOG=/dev/stderr
+      - KONG_PROXY_ERROR_LOG=/dev/stderr
+      - KONG_ADMIN_ACCESS_LOG=/dev/stdout
+      - KONG_PROXY_ACCESS_LOG=/dev/stdout
+      - KONG_PG_HOST=kong-db
+      - KONG_PG_PASSWORD=kong
+      - KONG_DATABASE=postgres
+    depends_on:
+      - kong-db
+      - kong-migrations
+    networks:
+      - kong-net
+
+  kong-setup:
+    restart: on-failure
+    build:
+      context: ./kong-setup
+    environment:
+      KONG_ADMIN_URL: "http://kong:8001"
+    depends_on:
+      - kong
+    networks:
+      - kong-net
+
+networks:
+  kong-net:
+  eggs-net:
+  heroes-net:
+  incubators-net:
+  inventory-net:
+  monsters-net:
+  shop-net:
+  storage-net:
