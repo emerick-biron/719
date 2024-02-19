@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/septunneuf-serveur/septunneuf-eggs" />
+    <file type="web" url="file://$PROJECT_DIR$/septunneuf-serveur/septunneuf-heroes" />
+    <file type="web" url="file://$PROJECT_DIR$/septunneuf-serveur/septunneuf-incubators" />
+    <file type="web" url="file://$PROJECT_DIR$/septunneuf-serveur/septunneuf-inventory" />
+    <file type="web" url="file://$PROJECT_DIR$/septunneuf-serveur/septunneuf-monsters" />
+    <file type="web" url="file://$PROJECT_DIR$/septunneuf-serveur/septunneuf-shop" />
+    <file type="web" url="file://$PROJECT_DIR$/septunneuf-serveur/septunneuf-storage" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

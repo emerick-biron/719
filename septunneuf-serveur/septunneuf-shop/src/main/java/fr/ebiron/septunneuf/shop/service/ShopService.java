@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -51,6 +53,7 @@ public class ShopService {
     }
 
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
+    @Retryable(retryFor = EggsGenerationException.class, backoff = @Backoff(10000))
     public void updateEggs() throws EggsGenerationException {
         log.info("Updating Eggs");
         List<Long> generatedEggIds = generateEggs();
