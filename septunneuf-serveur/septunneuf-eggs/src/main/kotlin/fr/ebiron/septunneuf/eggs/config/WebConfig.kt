@@ -10,18 +10,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 class WebConfig(
-    @Value("#{environment['DISABLE_CORS']?:false}")
-    private val disableCors: Boolean
+    @Value("#{environment['CORS_ALL_ORIGINS']?:false}")
+    private val corsAllOrigins: Boolean
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
-
 
     @Bean
     fun corsConfigurer(): WebMvcConfigurer {
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
-                log.info("Cors disabled: $disableCors")
-                if (disableCors) {
+                log.info("Cors all origins: $corsAllOrigins")
+                if (corsAllOrigins) {
                     registry.addMapping("/**").allowedOrigins("*")
                 }
             }
