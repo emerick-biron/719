@@ -1,0 +1,51 @@
+{
+  "eggs": {
+    "protocol": "http",
+    "host": "eggs-app",
+    "port": 8080,
+    "path": "/eggs",
+    "enabled": true
+  },
+  "heroes": {
+    "protocol": "http",
+    "host": "heroes-app",
+    "port": 8080,
+    "path": "/heroes",
+    "enabled": true
+  },
+  "incubators": {
+    "protocol": "http",
+    "host": "incubators-app",
+    "port": 8080,
+    "path": "/incubators",
+    "enabled": true
+  },
+  "inventory": {
+    "protocol": "http",
+    "host": "inventory-app",
+    "port": 8080,
+    "path": "/inventory",
+    "enabled": true
+  },
+  "monsters": {
+    "protocol": "http",
+    "host": "monsters-app",
+    "port": 8080,
+    "path": "/monsters",
+    "enabled": true
+  },
+  "shop": {
+    "protocol": "http",
+    "host": "shop-app",
+    "port": 8080,
+    "path": "/shop",
+    "enabled": true
+  },
+  "storage": {
+    "protocol": "http",
+    "host": "storage-app",
+    "port": 8080,
+    "path": "/storage",
+    "enabled": true
+  }
+}

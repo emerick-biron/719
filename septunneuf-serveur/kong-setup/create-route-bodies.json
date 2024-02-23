@@ -1,0 +1,93 @@
+{
+  "eggs": {
+    "protocols": [
+      "http"
+    ],
+    "paths": [
+      "/api/eggs"
+    ],
+    "preserve_host": true,
+    "strip_path":  true,
+    "service": {
+      "id": ""
+    }
+  },
+  "heroes": {
+    "protocols": [
+      "http"
+    ],
+    "paths": [
+      "/api/heroes"
+    ],
+    "preserve_host": true,
+    "strip_path": true,
+    "service": {
+      "id": ""
+    }
+  },
+  "incubators": {
+    "protocols": [
+      "http"
+    ],
+    "paths": [
+      "/api/incubators"
+    ],
+    "preserve_host": true,
+    "strip_path": true,
+    "service": {
+      "id": ""
+    }
+  },
+  "inventory": {
+    "protocols": [
+      "http"
+    ],
+    "paths": [
+      "/api/inventory"
+    ],
+    "preserve_host": true,
+    "strip_path": true,
+    "service": {
+      "id": ""
+    }
+  },
+  "monsters": {
+    "protocols": [
+      "http"
+    ],
+    "paths": [
+      "/api/monsters"
+    ],
+    "preserve_host": true,
+    "strip_path": true,
+    "service": {
+      "id": ""
+    }
+  },
+  "shop": {
+    "protocols": [
+      "http"
+    ],
+    "paths": [
+      "/api/shop"
+    ],
+    "preserve_host": true,
+    "strip_path": true,
+    "service": {
+      "id": ""
+    }
+  },
+  "storage": {
+    "protocols": [
+      "http"
+    ],
+    "paths": [
+      "/api/storage"
+    ],
+    "preserve_host": true,
+    "strip_path": true,
+    "service": {
+      "id": ""
+    }
+  }
+}
