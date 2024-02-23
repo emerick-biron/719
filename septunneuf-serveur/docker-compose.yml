@@ -33,7 +33,7 @@ services:
     environment:
       MONGODB_HOST: "heroes-db"
       MONGODB_PORT: "27017"
-      SHOP_SERVICE_URL: "http://kong:8000/api/shop"
+      SHOP_SERVICE_URL: "http://kong:8000/shop"
     depends_on:
       - heroes-db
     networks:
@@ -113,9 +113,9 @@ services:
       REDIS_PORT: "6379"
       RABBITMQ_HOST: "rabbitmq"
       RABBITMQ_PORT: "5672"
-      EGGS_SERVICE_URL: "http://kong:8000/api/eggs"
-      INVENTORY_SERVICE_URL: "http://kong:8000/api/inventory"
-      INCUBATORS_SERVICE_URL: "http://kong:8000/api/incubators"
+      EGGS_SERVICE_URL: "http://kong:8000/eggs"
+      INVENTORY_SERVICE_URL: "http://kong:8000/inventory"
+      INCUBATORS_SERVICE_URL: "http://kong:8000/incubators"
     depends_on:
       - rabbitmq
       - shop-db

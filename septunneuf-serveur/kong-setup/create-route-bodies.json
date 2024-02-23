@@ -4,7 +4,7 @@
       "http"
     ],
     "paths": [
-      "/api/eggs"
+      "/eggs"
     ],
     "preserve_host": true,
     "strip_path":  true,
@@ -17,7 +17,7 @@
       "http"
     ],
     "paths": [
-      "/api/heroes"
+      "/heroes"
     ],
     "preserve_host": true,
     "strip_path": true,
@@ -30,7 +30,7 @@
       "http"
     ],
     "paths": [
-      "/api/incubators"
+      "/incubators"
     ],
     "preserve_host": true,
     "strip_path": true,
@@ -43,7 +43,7 @@
       "http"
     ],
     "paths": [
-      "/api/inventory"
+      "/inventory"
     ],
     "preserve_host": true,
     "strip_path": true,
@@ -56,7 +56,7 @@
       "http"
     ],
     "paths": [
-      "/api/monsters"
+      "/monsters"
     ],
     "preserve_host": true,
     "strip_path": true,
@@ -69,7 +69,7 @@
       "http"
     ],
     "paths": [
-      "/api/shop"
+      "/shop"
     ],
     "preserve_host": true,
     "strip_path": true,
@@ -82,7 +82,7 @@
       "http"
     ],
     "paths": [
-      "/api/storage"
+      "/storage"
     ],
     "preserve_host": true,
     "strip_path": true,

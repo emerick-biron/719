@@ -74,13 +74,13 @@ All microservices running behind kong api gateway. The url of this gateway is [h
 
 The bases url for each microservice are as follows :
 
-- **Eggs Service**: [http://localhost:8000/api/eggs](http://localhost:8000/api/eggs)
-- **Heroes Service**: [http://localhost:8000/api/heroes](http://localhost:8000/api/heroes)
-- **Incubators Service**: [http://localhost:8000/api/incubators](http://localhost:8000/api/incubators)
-- **Inventory Service**: [http://localhost:8000/api/inventory](http://localhost:8000/api/inventory)
-- **Monsters Service**: [http://localhost:8000/api/monsters](http://localhost:8000/api/monsters)
-- **Shop Service**: [http://localhost:8000/api/shop](http://localhost:8000/api/shop)
-- **Storage Service**: [http://localhost:8000/api/storage](http://localhost:8000/api/storage)
+- **Eggs Service**: [http://localhost:8000/eggs](http://localhost:8000/eggs)
+- **Heroes Service**: [http://localhost:8000/heroes](http://localhost:8000/heroes)
+- **Incubators Service**: [http://localhost:8000/incubators](http://localhost:8000/incubators)
+- **Inventory Service**: [http://localhost:8000/inventory](http://localhost:8000/inventory)
+- **Monsters Service**: [http://localhost:8000/monsters](http://localhost:8000/monsters)
+- **Shop Service**: [http://localhost:8000/shop](http://localhost:8000/shop)
+- **Storage Service**: [http://localhost:8000/storage](http://localhost:8000/storage)
 
 ## API Documentation
 
