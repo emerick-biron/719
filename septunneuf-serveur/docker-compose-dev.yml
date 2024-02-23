@@ -34,7 +34,7 @@ services:
     environment:
       MONGODB_HOST: "heroes-db"
       MONGODB_PORT: "27017"
-      SHOP_SERVICE_URL: "http://kong-net:8000/api/shop"
+      SHOP_SERVICE_URL: "http://shop-app:8080/shop"
       CORS_ALL_ORIGINS: true
     depends_on:
       - heroes-db
