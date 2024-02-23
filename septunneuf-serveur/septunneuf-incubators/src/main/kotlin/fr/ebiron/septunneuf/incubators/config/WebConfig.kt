@@ -21,7 +21,7 @@ class WebConfig(
             override fun addCorsMappings(registry: CorsRegistry) {
                 log.info("Cors all origins: $corsAllOrigins")
                 if (corsAllOrigins) {
-                    registry.addMapping("/**").allowedOrigins("*")
+                    registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "HEAD", "POST", "PUT")
                 }
             }
         }
