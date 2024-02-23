@@ -41,7 +41,7 @@ function App() {
 			</header>
 			<Routes>
 				<Route index element={<InventoryView />} />
-				<Route path="/inventory" element={<InventoryView />} />
+				<Route path="/stock" element={<InventoryView />} />
 				<Route path="/shop-sell" element={<ShopSellView />} />
 				<Route path="/shop-buy" element={<ShopBuyView />} />
 				<Route path="/bag" element={<BagView />} />

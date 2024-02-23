@@ -6,20 +6,26 @@ import { useRecoilState } from "recoil";
 import { incubateEggIdsState } from "../../recoil/IncubateEggIdsState";
 
 const BagIncubator = (props:{incubatorId: number}) => {
+    const {incubatorId} = props;
+
     const [incubator, setIncubator] = useState<any | null>([]);
     const [openModal, setOpenModal] = useState(false); 
-    const [, setIncubateEggIds] = useRecoilState(incubateEggIdsState);
+    const [incubateEggIds, setIncubateEggIds] = useRecoilState(incubateEggIdsState);
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetchIncubatorsStatus(props.incubatorId);
+            const data = await fetchIncubatorsStatus(incubatorId);
             if (data !== null) {    
                 setIncubator(data);
-                
-                // Remplir le tableau incubateEggIdsState
-                setIncubateEggIds((prevIncubateEggIds) => [
-                    ...prevIncubateEggIds, data.eggId,
-                ]);
+                if(data.eggId !== undefined) {
+                    setIncubateEggIds((prevIncubateEggIds) => {
+                        // Vérifier si l'identifiant de l'œuf existe déjà dans le tableau
+                        if (prevIncubateEggIds.map(id => id).indexOf(data.eggId) === -1) {
+                            return [...prevIncubateEggIds, data.eggId];
+                        }
+                        return prevIncubateEggIds;
+                    });
+                }
             }
         };
         fetchData();
@@ -51,7 +57,7 @@ const BagIncubator = (props:{incubatorId: number}) => {
                 </div>
                 <div className="">
                     {
-                        incubator.incubatorStatus === 'FULL' ? (
+                        incubator.incubatorStatus === "FULL" ? (
                             <div className="">
                                 <BagEgg 
                                     eggId={incubator.eggId}
@@ -65,7 +71,7 @@ const BagIncubator = (props:{incubatorId: number}) => {
                     }
                 </div>
             </div>
-            <BagEggsModal incubatorId={props.incubatorId} open={openModal} onClose={handleCloseModal} />
+            <BagEggsModal incubatorId={incubatorId} open={openModal} onClose={handleCloseModal} />
         </>
     );
 };

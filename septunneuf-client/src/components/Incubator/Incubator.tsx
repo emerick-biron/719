@@ -46,6 +46,7 @@ const Incubator = () => {
         } else {
             setAlertSeverity("error");
         }
+        window.location.reload();
     };
 
     const handleCloseAlert = () => {

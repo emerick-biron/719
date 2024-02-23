@@ -44,7 +44,8 @@ const EggsShopBuy = () => {
             }
         } else {
             setAlertSeverity("error");
-        }        
+        } 
+        window.location.reload();
     };
 
     const handleCloseAlert = () => {

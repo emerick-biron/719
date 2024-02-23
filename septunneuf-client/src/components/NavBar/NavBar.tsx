@@ -18,8 +18,8 @@ const NavBar = () => {
             <div className="text-black container flex justify-center items-center">
                 <div className="ml-auto pl-4">
                     <Link to="/shop-buy" className="mx-4 font-semibold hover:text-teal-200">Boutique</Link>
-                    <Link to="/bag" className="mx-4 font-semibold hover:text-teal-200">Sac</Link>
-                    <Link to="/inventory" className="mx-4 font-semibold hover:text-teal-200">Stockage (Inventaire)</Link>
+                    <Link to="/bag" className="mx-4 font-semibold hover:text-teal-200">Inventaire</Link>
+                    <Link to="/stock" className="mx-4 font-semibold hover:text-teal-200">Stockage</Link>
                 </div>
                 <div className="ml-auto flex">
                     <div className="mr-4 font-semibold">

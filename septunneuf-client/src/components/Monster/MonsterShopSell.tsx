@@ -18,17 +18,10 @@ const MonsterShopSell = () => {
             const data = await fetchInventoryMonsters(hero);
             if (data !== null) {
                 setInventoryMonsterIds(data.monsterIds);
+                console.log("monster bag Id: ",data.monsterIds)
             }
         };
         fetchInventoryData();
-
-        const fetchStorageData = async () => {
-            const data = await fetchStorage(hero);
-            if (data !== null) {
-                setStorageMonsterIds(data.monsterIds);
-            }
-        };
-        fetchStorageData();
     }, []);
 
     const handleSellMonster = async (monsterId: number) => {
@@ -48,30 +41,15 @@ const MonsterShopSell = () => {
                 });
             }
         }
+        window.location.reload();
     };
 
     return (
         <>
-            <div className="bg-gray-100 rounded-md p-4 my-4 inline-block">
-                <h1 className="font-bold text-2xl">Monstres - Sac</h1>
-                <div className="flex flex-wrap">
-                    {inventoryMonsterIds.map((monsterId: number) => (
-                        <div key={monsterId} className="text-center rounded-md m-2">
-                            <Monster monsterId={monsterId}/>
-                            <CustomButton
-                                onClick={() => handleSellMonster(monsterId)}
-                                text="Vendre"
-                                color="red"
-                            />
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            <div className="bg-gray-100 rounded-md p-4 my-4 inline-block">
+            <div className="bg-gray-100 rounded-md p-4 my-4 inline-block ml-4">
                 <h1 className="font-bold text-2xl">Monstres - Inventaire</h1>
                 <div className="flex flex-wrap">
-                    {storageMonsterIds.map((monsterId: number) => (
+                    {inventoryMonsterIds.map((monsterId: number) => (
                         <div key={monsterId} className="text-center rounded-md m-2">
                             <Monster monsterId={monsterId}/>
                             <CustomButton

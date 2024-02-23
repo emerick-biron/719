@@ -17,7 +17,7 @@ const HeroLogin = () => {
 				const { name, color } = responseData;
 				setUser({ name, color, money: 25});
 				localStorage.setItem('hero', JSON.stringify({ name, color, money: 25}));
-				navigate('/inventory');
+				navigate('/stock');
 			} else {
 				console.log('Erreur lors de la connexion');
             }

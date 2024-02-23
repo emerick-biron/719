@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchEggsDetails } from "../../services/apiEgg";
 
 const BagEgg = (props:{eggId: number}) => {
+    const { eggId } = props
     const [egg, setEgg] = useState<any | null>([]);
 
     useEffect(() => {
@@ -11,8 +12,8 @@ const BagEgg = (props:{eggId: number}) => {
                 setEgg(data);
             }
         };
-        fetchData(props.eggId);
-    }, []);
+        fetchData(eggId);
+    }, [eggId]);
 
     return(
         <div className="flex flex-col items-center justify-center">
