@@ -1,12 +1,17 @@
 import { HeroType } from "../recoil/HeroContext";
 
 // /incubators/{incubatorId}/fill
-export const fillIncubator = async (incubationTime: number, incubatorId: number, eggId: number) => {
+export const fillIncubator = async (incubationTime: number, incubatorId: number, eggId: number, hero: HeroType | null) => {
+    if (!hero) {
+        console.error('Hero is null');
+        return null;
+    }
     try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/incubators/${incubatorId}/fill`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'heroName': hero?.name ? hero.name : 'louis',
             },
             body: JSON.stringify({ 
                 eggId: eggId,
