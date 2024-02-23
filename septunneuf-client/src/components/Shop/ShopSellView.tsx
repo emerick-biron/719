@@ -1,10 +1,13 @@
+import EggsShopSell from "../Egg.tsx/EggsShopSell"
+import MonsterShopSell from "../Monster/MonsterShopSell"
 import ShopNavBar from "./ShopNavBar"
 
 const ShopSellView = () => {
     return (
-        <div className="mt-20">
+        <div className="mt-20 mx-20">
             <ShopNavBar />
-            Vendre
+            <EggsShopSell />
+            <MonsterShopSell />
         </div>
     )
 }

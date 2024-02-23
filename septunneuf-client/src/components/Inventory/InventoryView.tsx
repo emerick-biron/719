@@ -1,55 +1,35 @@
 import React, { useEffect, useState } from "react";
-import Egg from "../Common/Egg";
-import Monster from "../Common/Monster";
+import Egg from "../Egg.tsx/Egg";
+import Monster from "../Monster/Monster";
+import { useRecoilValue } from "recoil";
+import { heroState } from "../../recoil/HeroContext";
+import { fetchStorage } from "../../services/apiMonsterStorage";
 
 const InvetoryView = () => {
 
-    const [eggs, setEggs] = useState([]);
-	const [monsters, setMonsters] = useState([]);
-    useEffect(() => {
-        const fetchEggInventory = async () => {
-          try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/inventory/eggs`);
-            if (!response.ok) {
-              console.log('Erreur lors de la récupération des données');
-            }
-            const data = await response.json();
-            setEggs(data);
-          } catch (error) {
-            console.error('Erreur:', error);
-          }
-        };
-        fetchEggInventory();
+    const hero = useRecoilValue(heroState);
+	const [monsterIds, setMonsterIds] = useState([]);
 
-        const fetchMonsters = async () => {
-          try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/inventory/monsters`);
-            if (!response.ok) {
-              console.log('Erreur lors de la récupération des données');
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetchStorage(hero);
+            if (data !== null) {    
+                setMonsterIds(data.monsterIds);
             }
-            const data = await response.json();
-            setMonsters(data);
-          } catch (error) {
-            console.error('Erreur:', error);
-          }
         };
-        fetchMonsters();
-      }, []);
+        fetchData();
+    }, [hero]);
 
     return (
-        <div className="pt-20">
-            <h1 className="text-2xl font-bold">Oeufs - {eggs.length}</h1>
-            <div className="flex flex-wrap">
-              {eggs.map((egg: any) => (
-                <Egg key={egg.id} data={egg}/>
-              ))}
-            </div>
-			<h1 className="text-2xl font-bold mt-4">Monstres - {monsters.length}</h1>
-            <div className="flex flex-wrap">
-				{monsters.map((monster: any) => (
-					<Monster key={monster.id} data={monster}/>
-				))}
-            </div>
+        <div className="pt-20 px-20">
+			<div className="bg-gray-100 rounded-md p-4 my-4 inline-block">
+				<h1 className="text-2xl font-bold mt-4">Monstres: {monsterIds.length}</h1>
+				<div className="flex flex-wrap">
+					{monsterIds.map((monsterId: number) => (
+						<Monster monsterId={monsterId}/>
+					))}
+				</div>
+			</div>
         </div>
     )
 }

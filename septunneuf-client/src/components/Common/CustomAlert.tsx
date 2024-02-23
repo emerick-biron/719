@@ -6,7 +6,7 @@ interface CustomAlertProps {
     severty: "success" | "error" | "warning" | "info";
     onClose: () => void;
 }
-const CustomButton = (props: CustomAlertProps) => {
+const CustomAlert = (props: CustomAlertProps) => {
     const { open, onClose, severty, text } = props;
     return (
         <Snackbar
@@ -21,4 +21,4 @@ const CustomButton = (props: CustomAlertProps) => {
     );
 }
 
-export default CustomButton;
+export default CustomAlert;
