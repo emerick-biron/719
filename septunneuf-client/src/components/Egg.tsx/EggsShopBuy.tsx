@@ -1,33 +1,32 @@
+
 import { useEffect, useState } from "react";
-import CustomButton from "../Common/CustomButton";
+import Egg from "./Egg";
 import CustomAlert from "../Common/CustomAlert";
+import CustomButton from "../Common/CustomButton";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { heroState } from "../../recoil/HeroContext";
-import { fetchShopIncubator } from "../../services/apiShop";
-import { fetchIncubators } from "../../services/apiIncubator";
+import { fetchShopEggs, fetchShopEggsPurchase } from "../../services/apiShop";
 
-const Incubator = () => {
-    const [incubatorIds, setIncubatorIds] = useState([]);
+const EggsShopBuy = () => {
+    const [eggs, setEggs] = useState([]);
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertSeverity, setAlertSeverity] = useState("success"); 
     const hero = useRecoilValue(heroState);
     const setHeroState = useSetRecoilState(heroState); 
 
-
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetchIncubators(hero);
+            const data = await fetchShopEggs();
             if (data !== null) {
-                setIncubatorIds(data.incubatorIds);
-            } 
+                setEggs(data.eggs);
+            }
         };
         fetchData();
-    }, [])
-
-
-    const handleBuyIncubator = async () => {
+    }, []);
+    
+    const handleBuyEgg = async (eggId: number) => {
         setAlertOpen(true);
-        const data = await fetchShopIncubator(hero);
+        const data = await fetchShopEggsPurchase(hero, eggId);
         if (data !== null) {
             setAlertSeverity("success");
             if (data.money !== undefined) {
@@ -45,32 +44,37 @@ const Incubator = () => {
             }
         } else {
             setAlertSeverity("error");
-        }
+        }        
     };
 
     const handleCloseAlert = () => {
         setAlertOpen(false);
     };
-
+    
     return (
-        <>
-            <div className="bg-gray-100 p-4 my-4 rounded-md shadow-sm inline-block">
-            <h1 className="font-bold text-2xl my-2">Incubateurs possédés: {incubatorIds.length}/6</h1>
-                <CustomButton 
-                    onClick={handleBuyIncubator} 
-                    text="Acheter un incubateur" 
-                    disabled={incubatorIds.length < 6 ? false: true} 
-                    color="green"
-                />
+        <div className="bg-gray-100 rounded-md p-4 my-4 inline-block">
+            <h1 className="font-bold text-2xl">Oeufs</h1>
+            <div className="flex flex-wrap">
+                {eggs.map((egg: any) => (
+                    <div key={egg.id} className="text-center rounded-md m-2">
+                        <Egg eggId={egg.id} price={egg.price}/>
+                        <CustomButton 
+                            onClick={() => handleBuyEgg(egg.id)}
+                            text="Acheter"
+                            color="green"
+                        />
+                    </div>
+                ))}
             </div>
             <CustomAlert 
-                severty="error"
-                text={alertSeverity === "success" ? "Achat d'incubateur réussi !" : "Erreur lors de l'achat d'incubateur"}
+                severty="success"
+                text={
+                    alertSeverity === "success" ? "Achat de l'oeuf réussi !":"Erreur lors de l'achat de l'oeuf"
+                }
                 open={alertOpen} 
                 onClose={handleCloseAlert} 
             />
-        </>
-      );
-}
-
-export default Incubator;
+        </div>
+    );
+};
+export default EggsShopBuy;

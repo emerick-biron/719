@@ -1,41 +1,45 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import BagTeamMonster from "./BagTeamMonster";
+import { useRecoilValue } from "recoil";
+import { heroState } from "../../recoil/HeroContext";
 
 const BagTeam = () => {
-    const [inventoryMonsters, setInventoryMonsters] = useState([]);
+    const [monsterIds, setMonsterIds] = useState([]);
+    const hero = useRecoilValue(heroState);
 
-    const fetchInventoryMonsters = async () => {
+
+    const fetchInventoryMonsters = useCallback(async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/inventory/monsters`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/inventory/monsters`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    heroName: hero?.name ? hero.name : 'louis',
+                }
+                });
             if (!response.ok) {
                 console.log('Erreur lors de la récupération des données');
             }
             const data = await response.json();
-            setInventoryMonsters(data);
+            setMonsterIds(data.monsterIds);
             } 
         catch (error) {
             console.error('Erreur:', error);
         }
-    };
+    }, [hero?.name]);
 
     useEffect(() => {
         fetchInventoryMonsters();
     }, [])
 
-    const handleDelete = async () => {
-        await fetchInventoryMonsters();
-    };
-
     return (
         <>
-            <h1 className="font-bold text-2xl my-2">Mon équipe: {inventoryMonsters.length}/6</h1>
+            <h1 className="font-bold text-2xl my-2">Mon équipe: {monsterIds.length}/6</h1>
             <div className="flex flex-col">
                 {
-                    inventoryMonsters.map((monster: any, value) => (
+                    monsterIds.map((monsterId: number) => (
                         <BagTeamMonster 
-                            key={monster.id}
-                            data={monster}
-                            onDelete={handleDelete}
+                            monsterId={monsterId}
                         />
                     ))
                 }

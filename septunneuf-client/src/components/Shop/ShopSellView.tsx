@@ -1,15 +1,13 @@
-import EggsShop from "../Egg.tsx/EggsShop"
+import EggsShopSell from "../Egg.tsx/EggsShopSell"
+import MonsterShopSell from "../Monster/MonsterShopSell"
 import ShopNavBar from "./ShopNavBar"
 
 const ShopSellView = () => {
     return (
         <div className="mt-20 mx-20">
             <ShopNavBar />
-            <EggsShop 
-                CustomButtonLabel="Vendre"
-                color="red"
-                sellOrBuy={true}
-            />
+            <EggsShopSell />
+            <MonsterShopSell />
         </div>
     )
 }

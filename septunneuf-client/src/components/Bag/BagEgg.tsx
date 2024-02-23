@@ -1,29 +1,17 @@
 import { useEffect, useState } from "react";
+import { fetchEggsDetails } from "../../services/apiEgg";
 
 const BagEgg = (props:{eggId: number}) => {
     const [egg, setEgg] = useState<any | null>([]);
 
     useEffect(() => {
-        const fetchEgg = async (eggId: number) => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/eggs/${eggId}/details`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                if (!response.ok) {
-                    console.log('Erreur lors de la récupération des données');
-                }
-                const data = await response.json();
-                console.log("fetchIncubatorStatus data:", data[0]);
-                setEgg(data[0]);
-            } 
-            catch (error) {
-                console.error('Erreur:', error);
+        const fetchData = async (eggId: number) => {
+            const data = await fetchEggsDetails(eggId);
+            if (data !== null) {
+                setEgg(data);
             }
         };
-        fetchEgg(props.eggId);
+        fetchData(props.eggId);
     }, []);
 
     return(

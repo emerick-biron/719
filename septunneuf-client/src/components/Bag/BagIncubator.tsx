@@ -1,32 +1,28 @@
 import { useEffect, useState } from "react";
 import BagEgg from "./BagEgg";
 import BagEggsModal from "./BagEggsModal";
+import { fetchIncubatorsStatus } from "../../services/apiIncubator";
+import { useRecoilState } from "recoil";
+import { incubateEggIdsState } from "../../recoil/IncubateEggIdsState";
 
 const BagIncubator = (props:{incubatorId: number}) => {
     const [incubator, setIncubator] = useState<any | null>([]);
     const [openModal, setOpenModal] = useState(false); 
-    
+    const [, setIncubateEggIds] = useRecoilState(incubateEggIdsState);
+
     useEffect(() => {
-        const fetchIncubatorStatus = async (incubatorId: number) => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/incubators/${incubatorId}/status`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                if (!response.ok) {
-                    console.log('Erreur lors de la récupération des données');
-                }
-                const data = await response.json();
-                console.log("fetchIncubatorStatus data:", data[0]);
-                setIncubator(data[0]);
-            } 
-            catch (error) {
-                console.error('Erreur:', error);
+        const fetchData = async () => {
+            const data = await fetchIncubatorsStatus(props.incubatorId);
+            if (data !== null) {    
+                setIncubator(data);
+                
+                // Remplir le tableau incubateEggIdsState
+                setIncubateEggIds((prevIncubateEggIds) => [
+                    ...prevIncubateEggIds, data.eggId,
+                ]);
             }
         };
-        fetchIncubatorStatus(props.incubatorId);
+        fetchData();
     }, []);
 
     const handleOpenModal = () => {
@@ -42,7 +38,7 @@ const BagIncubator = (props:{incubatorId: number}) => {
             <div className="bg-gray-100 p-4 rounded-md">
                 <div>
                     {
-                        incubator.eggId ? (
+                        incubator.incubatorStatus === 'FULL' ? (
                             <div className="">
                                 Incubation en cours...
                             </div>    
@@ -55,7 +51,7 @@ const BagIncubator = (props:{incubatorId: number}) => {
                 </div>
                 <div className="">
                     {
-                        incubator.eggId ? (
+                        incubator.incubatorStatus === 'FULL' ? (
                             <div className="">
                                 <BagEgg 
                                     eggId={incubator.eggId}
@@ -69,7 +65,7 @@ const BagIncubator = (props:{incubatorId: number}) => {
                     }
                 </div>
             </div>
-            <BagEggsModal open={openModal} onClose={handleCloseModal} />
+            <BagEggsModal incubatorId={props.incubatorId} open={openModal} onClose={handleCloseModal} />
         </>
     );
 };

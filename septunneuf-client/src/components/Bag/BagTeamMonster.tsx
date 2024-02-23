@@ -1,73 +1,47 @@
 import { useRecoilValue } from "recoil";
 import CustomButton from "../Common/CustomButton"
 import { heroState } from "../../recoil/HeroContext";
+import { useCallback, useEffect, useState } from "react";
+import { fetchInventoryMonstersRelease, fetchInventoryMonstersStore } from "../../services/apiMonsterInventory";
+import { fetchMonsterDetails } from "../../services/apiMonster";
 
-const BagTeamMonster = (props:{data:any, onDelete: () => void }) => {
+const BagTeamMonster = (props:{monsterId: number}) => {
+
     const hero = useRecoilValue(heroState);
+    const [monster, setMonster] = useState<any>();
 
-    const handleDeleteMonster = async (monsterId: number) => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/inventory/monsters/${monsterId}/remove`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    heroName: hero?.name,
-                    monsterIds: monsterId
-                })
-            });
-            if (!response.ok) {
-                console.log('Erreur lors de la suppression');
-            } else {
-                props.onDelete();
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetchMonsterDetails(props.monsterId);
+            if (data !== null) {    
+                setMonster(data);
             }
-            const data = await response.json();
-            console.log(data);
-        } 
-        catch (error) {
-            console.error('Erreur:', error);
-        }
-    };
+        };
+        fetchData();
+    }, []);
 
-    const handleMoveMonster = async (monsterId: number) => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/storage/add`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    heroName: hero?.name,
-                    monsterIds: monsterId
-                })
-            });
-            if (!response.ok) {
-                console.log('Erreur lors de la suppression');
-            } else {
-                props.onDelete();
-            }
-            const data = await response.json();
-            console.log(data);
-        } 
-        catch (error) {
-            console.error('Erreur:', error);
-        }
-    };
+
+    const handleMonsterStore = useCallback(async (monsterId: number) => {
+        fetchInventoryMonstersStore(hero, monsterId);
+    }, [props.monsterId, hero?.name]);
+
+    const handleMonsterRelease = useCallback(async (monsterId: number) => {
+        fetchInventoryMonstersRelease(hero, monsterId);
+    }, [props.monsterId, hero?.name]);
 
     return(
-        <div style={{ border: `2px solid ${props.data.color}` }} className="w-1/2 px-2 my-2 flex items-center rounded-md">
-            <div className="font-semibold pl-2">{props.data.id} - {props.data.name.toUpperCase()}</div>
+        <div style={{ border: `2px solid ${monster?.color}` }} className="w-1/2 px-2 my-2 flex items-center rounded-md">
+            <div className="font-semibold pl-2">{props.monsterId} - {monster?.name.toUpperCase()}</div>
             <div className="ml-auto">
 
                 <CustomButton 
-                    onClick={() => handleMoveMonster(props.data.id)}
-                    text="Deplacer"
+                    onClick={() => handleMonsterStore(props.monsterId)}
+                    text="Stocker"
                     color="green"
                 />
                 <CustomButton 
-                    onClick={() => handleDeleteMonster(props.data.id)}
-                    text="Supprimer"
+                    onClick={() => handleMonsterRelease(props.monsterId)}
+                    text="Libérer"
                     color="red"
                 />
             </div>
