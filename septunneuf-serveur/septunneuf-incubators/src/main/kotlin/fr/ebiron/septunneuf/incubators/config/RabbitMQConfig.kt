@@ -26,6 +26,11 @@ class RabbitMQConfig {
     }
 
     @Bean
+    fun removeEggToInventory(): Queue {
+        return Queue("removeEggToInventory.queue")
+    }
+
+    @Bean
     fun rabbitTemplate(connectionFactory: ConnectionFactory): RabbitTemplate {
         val rabbitTemplate = RabbitTemplate(connectionFactory)
         rabbitTemplate.messageConverter = producerJackson2MessageConverter()

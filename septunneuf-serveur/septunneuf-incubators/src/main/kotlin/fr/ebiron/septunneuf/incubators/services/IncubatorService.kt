@@ -1,5 +1,6 @@
 package fr.ebiron.septunneuf.incubators.services
 
+import fr.ebiron.septunneuf.incubators.dto.EggToInventoryMessage
 import fr.ebiron.septunneuf.incubators.exceptions.EggAlreadyInIncubatorException
 import fr.ebiron.septunneuf.incubators.exceptions.NotFoundException
 import fr.ebiron.septunneuf.incubators.exceptions.TooManyIncubatorException
@@ -44,7 +45,7 @@ class IncubatorService(
         return db.findById(incubatorId).orElseThrow { NotFoundException("Incubator not found for id $incubatorId") }
     }
 
-    fun fillIncubator(incubatorId: Long, eggId: Long, incubationTime: Duration) {
+    fun fillIncubator(incubatorId: Long, eggId: Long, incubationTime: Duration, heroName:String) {
         val incubator = getIncubatorById(incubatorId)
         incubator.eggId = eggId
         incubator.hatchingDateTime = LocalDateTime.now().plus(incubationTime.toJavaDuration())
@@ -55,6 +56,7 @@ class IncubatorService(
             log.error("Egg $eggId is already in an incubator")
             throw EggAlreadyInIncubatorException("Egg $eggId is already in an incubator")
         }
+        incubatorPublisher.sendRemoveEggToInventoryMessage(eggId, heroName)
     }
 
     @Scheduled(fixedRate = 5000)

@@ -47,9 +47,14 @@ class IncubatorController(private val service: IncubatorService) {
 
     @PutMapping("/{incubatorId}/fill")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun fillIncubator(@PathVariable incubatorId: Long, @Valid @RequestBody req: FillIncubatorRequest) {
+    fun fillIncubator(
+        @RequestHeader(
+            required = true,
+            name = "heroName"
+        ) @NotBlank heroName: String,
+        @PathVariable incubatorId: Long,
+        @Valid @RequestBody req: FillIncubatorRequest) {
         log.info("PUT /incubators/$incubatorId/fill - eggId=${req.eggId}, incubationTime=${req.incubationTime}")
-        service.fillIncubator(incubatorId, req.eggId, req.incubationTime)
+        service.fillIncubator(incubatorId, req.eggId, req.incubationTime, heroName)
     }
-
 }
