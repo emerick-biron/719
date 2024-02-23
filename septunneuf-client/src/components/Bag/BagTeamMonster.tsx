@@ -22,15 +22,17 @@ const BagTeamMonster = (props:{monsterId: number}) => {
 
 
     const handleMonsterStore = useCallback(async (monsterId: number) => {
-        fetchInventoryMonstersStore(hero, monsterId);
+        await fetchInventoryMonstersStore(hero, monsterId);
+        window.location.reload();
     }, [props.monsterId, hero?.name]);
 
     const handleMonsterRelease = useCallback(async (monsterId: number) => {
-        fetchInventoryMonstersRelease(hero, monsterId);
+        await fetchInventoryMonstersRelease(hero, monsterId);
+        window.location.reload();
     }, [props.monsterId, hero?.name]);
 
     return(
-        <div style={{ border: `2px solid ${monster?.color}` }} className="w-1/2 px-2 my-2 flex items-center rounded-md">
+        <div style={{ border: `2px solid ${monster?.color}` }} className="w-2/3 px-2 my-2 flex items-center rounded-md">
             <div className="font-semibold pl-2">{props.monsterId} - {monster?.name.toUpperCase()}</div>
             <div className="ml-auto">
 

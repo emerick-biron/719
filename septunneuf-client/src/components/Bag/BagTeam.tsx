@@ -37,8 +37,9 @@ const BagTeam = () => {
             <h1 className="font-bold text-2xl my-2">Mon équipe: {monsterIds.length}/6</h1>
             <div className="flex flex-col">
                 {
-                    monsterIds.map((monsterId: number) => (
+                    monsterIds.map((monsterId: number, index) => (
                         <BagTeamMonster 
+                            key={index}
                             monsterId={monsterId}
                         />
                     ))

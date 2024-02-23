@@ -7,6 +7,7 @@ export const fillIncubator = async (incubationTime: number, incubatorId: number,
         return null;
     }
     try {
+        console.log("api put request: ", incubationTime, " eggId: ",eggId)
         const response = await fetch(`${process.env.REACT_APP_API_URL}/incubators/${incubatorId}/fill`, {
             method: 'PUT',
             headers: {

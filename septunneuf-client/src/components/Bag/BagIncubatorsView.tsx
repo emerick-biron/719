@@ -25,7 +25,7 @@ const BagIncubatorView = () => {
     return(
         <>
             <h1 className="font-bold text-2xl my-2">Mes incubateurs: {incubatorsIds.length}/6</h1>
-            <div className="flex">
+            <div  className="grid grid-cols-3 gap-4">
                 {
                     incubatorsIds.map((incubatorsId, index) => (
                         <BagIncubator 
