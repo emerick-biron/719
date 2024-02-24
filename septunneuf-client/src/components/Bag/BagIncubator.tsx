@@ -17,6 +17,7 @@ const BagIncubator = (props:{incubatorId: number}) => {
             const data = await fetchIncubatorsStatus(incubatorId);
             if (data !== null) {    
                 setIncubator(data);
+                console.log(data);
                 if(data.eggId !== undefined) {
                     setIncubateEggIds((prevIncubateEggIds) => {
                         // Vérifier si l'identifiant de l'œuf existe déjà dans le tableau
