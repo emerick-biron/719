@@ -25,8 +25,8 @@ const InvetoryView = () => {
 			<div className="bg-gray-100 rounded-md p-4 my-4 inline-block">
 				<h1 className="text-2xl font-bold mt-4">Monstres: {monsterIds.length}</h1>
 				<div className="flex flex-wrap">
-					{monsterIds.map((monsterId: number) => (
-						<Monster monsterId={monsterId}/>
+					{monsterIds.map((monsterId: number, index) => (
+						<Monster key={index} monsterId={monsterId}/>
 					))}
 				</div>
 			</div>
