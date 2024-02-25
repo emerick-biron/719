@@ -3,7 +3,9 @@
 <!-- TOC -->
 * [Septunneuf Server Project](#septunneuf-server-project)
   * [Introduction](#introduction)
-  * [Project Structure](#project-structure)
+  * [Project Architecture](#project-architecture)
+    * [Endpoints](#endpoints)
+    * [Queues](#queues)
   * [Technology Stack](#technology-stack)
   * [Setup and Deployment](#setup-and-deployment)
     * [Prerequisites](#prerequisites)
@@ -17,7 +19,7 @@
 
 The Septunneuf Server project is the backend of a browser-based game designed around a microservices architecture. It allows players to create heroes, manage eggs and incubators, interact with a shop, and more. This README details the server project's setup, build, deployment, and functionality.
 
-## Project Structure
+## Project Architecture
 
 The project is structured into several microservices, each handling a specific part of the game's functionality:
 
@@ -28,6 +30,45 @@ The project is structured into several microservices, each handling a specific p
 - **Monsters Service**: Manages monster-related functionalities.
 - **Shop Service**: Handles operations related to the in-game shop.
 - **Storage Service**: Responsible for data persistence and storage.
+
+### Endpoints
+
+| Method                                            | Path                                      | Service    | Description                                 |
+|---------------------------------------------------|-------------------------------------------|------------|---------------------------------------------|
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/eggs/generate`                          | Eggs       | Generate one or more eggs at random.        |
+| ![GET](https://img.shields.io/badge/GET-green)    | `/eggs/{eggId}/details`                   | Eggs       | Get egg details                             |
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/heroes/create`                          | Heroes     | Create a new hero                           |
+| ![GET](https://img.shields.io/badge/GET-green)    | `/heroes/{heroName}/details`              | Heroes     | Get hero details                            |
+| ![PUT](https://img.shields.io/badge/PUT-blue)     | `/incubators/{incubatorId}/fill`          | Incubators | Add an egg to an incubator.                 |
+| ![GET](https://img.shields.io/badge/GET-green)    | `/incubators`                             | Incubators | Get the ids of incubators owned by a hero   |
+| ![GET](https://img.shields.io/badge/GET-green)    | `/incubators/{incubatorId}/status`        | Incubators | Get the status of an incubator.             |
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/inventory/monsters/{monsterId}/store`   | Inventory  | Place an inventory monster in a storage box |
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/inventory/monsters/{monsterId}/release` | Inventory  | To release a monster from inventory         |
+| ![GET](https://img.shields.io/badge/GET-green)    | `/inventory/monsters`                     | Inventory  | List monsters in the inventory              |
+| ![GET](https://img.shields.io/badge/GET-green)    | `/inventory/eggs`                         | Inventory  | List eggs in the inventory                  |
+| ![GET](https://img.shields.io/badge/GET-green)    | `/monsters/{monsterId}/details`           | Monsters   | Get information about the monster           |
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/shop/wallet/create`                     | Shop       | Create hero's wallet                        |
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/shop/update`                            | Shop       | Renew available eggs                        |
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/shop/monsters/{monsterId}/sell`         | Shop       | Sell a monster                              |
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/shop/incubator`                         | Shop       | Debit hero from incubator amount            |
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/shop/eggs/{eggId}/sell`                 | Shop       | Sell an egg                                 |
+| ![POST](https://img.shields.io/badge/POST-yellow) | `/shop/eggs/{eggId}/purchase`             | Shop       | Buy an egg                                  |
+| ![GET](https://img.shields.io/badge/GET-green)    | `/shop/eggs`                              | Shop       | List egg ids in the store                   |
+| ![GET](https://img.shields.io/badge/GET-green)    | `/storage`                                | Storage    | List stored monsters                        |
+
+### Queues
+
+| Name                             | Publisher(s)              | Consumer(s) | Description                    |
+|----------------------------------|---------------------------|-------------|--------------------------------|
+| `removeEggs.queue`               | Incubators,Inventory,Shop | Eggs        | Remove an egg from the game    |
+| `createIncubator.queue`          | Shop                      | Incubators  | Create an incubator            |
+| `createMonster.queue`            | Incubators                | Monsters    | Create a monster               |
+| `removeEggToInventory.queue`     | Incubators,Shop           | Inventory   | Remove egg from inventory      |
+| `addEggToInventory.queue`        | Shop                      | Inventory   | Add egg to inventory           |
+| `removeMonsterToInventory.queue` | Shop                      | Inventory   | Remove monster from inventory  |
+| `addMonsterToInventory.queue`    | Monsters                  | Inventory   | Add monster to inventory       |
+| `storeMonster.queue`             | Inventory                 | Storage     | Store a monster                |
+| `deleteMonster.queue`            | Inventory                 | Monsters    | Remove a monster from the game |
 
 ## Technology Stack
 
